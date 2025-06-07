@@ -31,8 +31,8 @@ public class Produto {
     
     @Column(name = "codigoProd")
     private int codigoProd;
-             // Classe atual    recebe   Classe Estrangeira  
-    @ManyToOne // @Many         To         One 
+             
+    @ManyToOne 
     @JoinColumn(name = "categoria_id", unique = true)
     private Categoria categoria;
 

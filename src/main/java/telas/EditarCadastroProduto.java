@@ -6,6 +6,7 @@ import classes.Produto;
 import classesDAO.ProdutoDAO;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import validacao.Alerta;
 
 
 public class EditarCadastroProduto extends javax.swing.JDialog {
@@ -16,7 +17,7 @@ public class EditarCadastroProduto extends javax.swing.JDialog {
         initComponents();
         this.produto = produto;
         montarCampos();
-        
+        montarComboboxCategorias();
     }
     public void montarCampos() {
         tfEditarNome.setText(produto.getNomeProd());
@@ -35,6 +36,40 @@ public class EditarCadastroProduto extends javax.swing.JDialog {
         }
         cbEPCateg.setModel(modelo);
     }
+    
+    public void salvarEdicao(){
+        if(tfEditarNome.getText().isBlank() && tfEditarPreco.getText().isBlank()
+            && tfEditarCod.getText().isBlank() && tfEditarEstoque.getText().isBlank()
+            && taEditarDesc.getText().isBlank()){
+            Alerta.Erro("Campo vazio", "Por favor, inserir as informações");
+        } else if(tfEditarNome.getText().isBlank()){
+            Alerta.Erro("Campo vazio", "Por favor, inserir o nome");
+        } else if(tfEditarPreco.getText().isBlank()){
+            Alerta.Erro("Campo vazio", "Por favor, inserir o preço");
+        } else if(tfEditarCod.getText().isBlank()){
+            Alerta.Erro("Campo vazio", "Por favor, inserir o código");
+        } else if(tfEditarEstoque.getText().isBlank()){
+            Alerta.Erro("Campo vazio", "Por favor, inserir a quantidade no estoque");
+        } else if(taEditarDesc.getText().isBlank()){
+            Alerta.Erro("Campo vazio", "Por favor, inserir a descrição");
+        } else {
+            
+            Categoria categselecionado = (Categoria) listaCategorias.stream()
+                    .filter(categoria -> categoria.getNomeCateg().equals(cbEPCateg.getSelectedItem().toString()))
+                    .findFirst()
+                    .orElse(null);
+            
+            produto.setNomeProd(tfEditarNome.getText());
+            produto.setPreco(Double.parseDouble(tfEditarPreco.getText()));
+            produto.setQtdEstoque(Integer.parseInt(tfEditarEstoque.getText()));
+            produto.setCodigoProd(Integer.parseInt(tfEditarCod.getText()));
+            produto.setDescProd(taEditarDesc.getText());
+            produto.setCategoria(categselecionado);
+            
+            ProdutoDAO.editarProduto(produto);
+        }
+    }
+    
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -92,7 +127,6 @@ public class EditarCadastroProduto extends javax.swing.JDialog {
         cbEPCateg.setBackground(new java.awt.Color(255, 255, 255));
         cbEPCateg.setFont(new java.awt.Font("Segoe UI Semibold", 1, 25)); // NOI18N
         cbEPCateg.setForeground(new java.awt.Color(0, 0, 0));
-        cbEPCateg.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Action Figure", "Jogos", "Acessórios", "Consoles Retro", "Camisetas temáticas", "Moletons e jaquetas", "Funko Pop", "Estátuas e miniaturas", "Réplicas", "Cards colecionáveis", "HQ", "Mangás", "RPG", "Jogos de cartas", " ", " " }));
 
         tfEditarCod.setBackground(new java.awt.Color(255, 255, 255));
         tfEditarCod.setFont(new java.awt.Font("Segoe UI Semibold", 1, 30)); // NOI18N
@@ -145,6 +179,11 @@ public class EditarCadastroProduto extends javax.swing.JDialog {
         buttonEditarSalvar.setFocusable(false);
         buttonEditarSalvar.setFont(new java.awt.Font("Segoe UI Semibold", 1, 25)); // NOI18N
         buttonEditarSalvar.setRadius(32);
+        buttonEditarSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonEditarSalvarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -235,6 +274,7 @@ public class EditarCadastroProduto extends javax.swing.JDialog {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void tfEditarCodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfEditarCodActionPerformed
@@ -252,6 +292,11 @@ public class EditarCadastroProduto extends javax.swing.JDialog {
     private void tfEditarNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfEditarNomeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tfEditarNomeActionPerformed
+
+    private void buttonEditarSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEditarSalvarActionPerformed
+        salvarEdicao();
+        this.dispose();
+    }//GEN-LAST:event_buttonEditarSalvarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -6,7 +6,7 @@
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
-    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="true"/>
   </SyntheticProperties>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
@@ -230,25 +230,7 @@
               <Color blue="0" green="0" red="0" type="rgb"/>
             </Property>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="17">
-                <StringItem index="0" value=" "/>
-                <StringItem index="1" value="Action Figure"/>
-                <StringItem index="2" value="Jogos"/>
-                <StringItem index="3" value="Acess&#xf3;rios"/>
-                <StringItem index="4" value="Consoles Retro"/>
-                <StringItem index="5" value="Camisetas tem&#xe1;ticas"/>
-                <StringItem index="6" value="Moletons e jaquetas"/>
-                <StringItem index="7" value="Funko Pop"/>
-                <StringItem index="8" value="Est&#xe1;tuas e miniaturas"/>
-                <StringItem index="9" value="R&#xe9;plicas"/>
-                <StringItem index="10" value="Cards colecion&#xe1;veis"/>
-                <StringItem index="11" value="HQ"/>
-                <StringItem index="12" value="Mang&#xe1;s"/>
-                <StringItem index="13" value="RPG"/>
-                <StringItem index="14" value="Jogos de cartas"/>
-                <StringItem index="15" value=" "/>
-                <StringItem index="16" value=" "/>
-              </StringArray>
+              <StringArray count="0"/>
             </Property>
           </Properties>
           <AuxValues>
@@ -360,6 +342,9 @@
             </Property>
             <Property name="radius" type="int" value="32"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonEditarSalvarActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

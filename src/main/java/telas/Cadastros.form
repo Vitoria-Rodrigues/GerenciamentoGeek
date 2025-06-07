@@ -2261,6 +2261,9 @@
                         </Property>
                         <Property name="radius" type="int" value="32"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonPPesquisarActionPerformed"/>
+                      </Events>
                     </Component>
                     <Container class="javax.swing.JScrollPane" name="jScrollPane4">
                       <AuxValues>
@@ -2286,44 +2289,44 @@
                                 <Column editable="false" title="C&#xf3;digo" type="java.lang.Integer"/>
                                 <Column editable="false" title="Produto" type="java.lang.String"/>
                                 <Column editable="false" title="Categoria" type="java.lang.String"/>
-                                <Column editable="false" title="Qtd Estoque" type="java.lang.Integer"/>
+                                <Column editable="false" title="Qtd Est." type="java.lang.Integer"/>
                                 <Column editable="false" title="Pre&#xe7;o" type="java.lang.Double"/>
                                 <Column editable="false" title="Descri&#xe7;&#xe3;o" type="java.lang.String"/>
                               </Table>
                             </Property>
                             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor" postCode="tableProdutos.getTableHeader().setReorderingAllowed(false);&#xa;        &#xa;        for (int i = 0; i &lt; tableProdutos.getColumnCount(); i++) {&#xa;            tableProdutos.getColumnModel().getColumn(i).setCellRenderer(centralizarTabela);&#xa;        }&#xa;&#xa;TableCellRenderer baseRender1 = tableProdutos.getTableHeader().getDefaultRenderer();&#xa;        tableProdutos.getTableHeader().setDefaultRenderer((tbl, value, isSelected, hasFocus, row, column) -&gt; {&#xa;            JComponent comp = (JComponent) baseRender1.getTableCellRendererComponent(tbl, value, isSelected, hasFocus, row, column);&#xa;            comp.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));&#xa;            return comp;&#xa;        });&#xa;tableProdutos.setIntercellSpacing(new Dimension(0, 0));&#xa;tableProdutos.setForeground(new java.awt.Color(0, 0, 0));&#xa;tableProdutos.getTableHeader().setBackground(new Color(0, 64, 121));&#xa;tableProdutos.getTableHeader().setForeground(new Color(255, 255,255));&#xa;tableProdutos.getTableHeader().setSize(50, 50);&#xa;tableProdutos.setShowVerticalLines(false);&#xa;tableProdutos.getTableHeader().setFont( new Font(&quot;Segoe UI Semibold&quot;,Font.BOLD, 18));">
                               <TableColumnModel selectionModel="0">
-                                <Column maxWidth="100" minWidth="80" prefWidth="90" resizable="true">
+                                <Column maxWidth="80" minWidth="40" prefWidth="70" resizable="true">
                                   <Title/>
                                   <Editor/>
                                   <Renderer/>
                                 </Column>
-                                <Column maxWidth="130" minWidth="110" prefWidth="120" resizable="true">
+                                <Column maxWidth="130" minWidth="50" prefWidth="120" resizable="true">
                                   <Title/>
                                   <Editor/>
                                   <Renderer/>
                                 </Column>
-                                <Column maxWidth="260" minWidth="240" prefWidth="250" resizable="true">
+                                <Column maxWidth="260" minWidth="100" prefWidth="250" resizable="true">
                                   <Title/>
                                   <Editor/>
                                   <Renderer/>
                                 </Column>
-                                <Column maxWidth="210" minWidth="190" prefWidth="200" resizable="true">
+                                <Column maxWidth="210" minWidth="80" prefWidth="200" resizable="true">
                                   <Title/>
                                   <Editor/>
                                   <Renderer/>
                                 </Column>
-                                <Column maxWidth="90" minWidth="80" prefWidth="90" resizable="true">
+                                <Column maxWidth="90" minWidth="40" prefWidth="90" resizable="true">
                                   <Title/>
                                   <Editor/>
                                   <Renderer/>
                                 </Column>
-                                <Column maxWidth="160" minWidth="140" prefWidth="150" resizable="true">
+                                <Column maxWidth="160" minWidth="80" prefWidth="150" resizable="true">
                                   <Title/>
                                   <Editor/>
                                   <Renderer/>
                                 </Column>
-                                <Column maxWidth="310" minWidth="290" prefWidth="300" resizable="true">
+                                <Column maxWidth="310" minWidth="100" prefWidth="300" resizable="true">
                                   <Title/>
                                   <Editor/>
                                   <Renderer/>
@@ -2362,6 +2365,9 @@
                         </Property>
                         <Property name="radius" type="int" value="32"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonExibirPEditarActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="customs.botaoBorda" name="buttonExibirPPesquisar">
                       <Properties>
@@ -2380,6 +2386,9 @@
                         </Property>
                         <Property name="radius" type="int" value="32"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonExibirPPesquisarActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="customs.botaoBorda" name="buttonExibirPCad">
                       <Properties>
@@ -2398,6 +2407,9 @@
                         </Property>
                         <Property name="radius" type="int" value="32"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonExibirPCadActionPerformed"/>
+                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>

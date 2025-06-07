@@ -250,6 +250,20 @@ public class Cadastros extends javax.swing.JFrame {
         }
         tableFuncionarios.setModel(modelo);
     }
+    
+    public void listaProdutos(){  //Método para listar os produtos que foram cadastrados no banco de dados
+        DefaultTableModel modelo = (DefaultTableModel) tableProdutos.getModel();
+        modelo.setRowCount(0);
+        List<Produto> lista = ProdutoDAO.listarProdutos(tfBuscarProdutos.getText());
+        
+        for(Produto produto : lista){
+            String[] linha = {produto.getId().toString(), String.valueOf(produto.getCodigoProd()), produto.getNomeProd(),
+            produto.getCategoria().getNomeCateg(), String.valueOf(produto.getQtdEstoque()), 
+            String.valueOf(produto.getPreco()), produto.getDescProd()};
+            modelo.addRow(linha);
+        }
+        tableProdutos.setModel(modelo);
+    }
 
     public void editarClientes() {  //Método para editar os clientes que foram cadastrados no banco de dados
         int linhaSelecionada = tableClientes.getSelectedRow();
@@ -281,6 +295,21 @@ public class Cadastros extends javax.swing.JFrame {
         listaFuncionarios();
     }
 
+    public void editarProdutos() {  //Método para editar os produtos que foram cadastrados no banco de dados
+        int linhaSelecionada = tableProdutos.getSelectedRow();
+
+        if (linhaSelecionada == -1) {
+            Alerta.Erro("Erro na linha", "Nenhuma linha selecionada");
+        } else {
+            String idProduto = (String) tableProdutos.getValueAt(linhaSelecionada, 0);
+
+            new EditarCadastroProduto(this,
+                    rootPaneCheckingEnabled,
+                    ProdutoDAO.listarProduto(idProduto)).setVisible(true);
+        }
+        listaProdutos();
+    }
+
     public void excluirClientes() { ////Método para excluir os clientes que foram cadastrados no banco de dados
         int linhaSelecionada = tableClientes.getSelectedRow();
 
@@ -305,6 +334,19 @@ public class Cadastros extends javax.swing.JFrame {
             FuncionarioDAO.excluirFuncionario(idFuncionario);
         }
         listaFuncionarios();
+    }
+    
+    public void excluirProdutos() { ////Método para excluir os produtos que foram cadastrados no banco de dados
+        int linhaSelecionada = tableProdutos.getSelectedRow();
+
+        if (linhaSelecionada == -1) {
+            Alerta.Erro("Erro na linha", "Nenhuma linha selecionada");
+        } else {
+            String idProduto = (String) tableProdutos.getValueAt(linhaSelecionada, 0);
+
+            ProdutoDAO.excluirProdutos(idProduto);
+        }
+        listaProdutos();
     }
 
     @SuppressWarnings("unchecked")
@@ -1650,6 +1692,11 @@ public class Cadastros extends javax.swing.JFrame {
         buttonPPesquisar.setFocusable(false);
         buttonPPesquisar.setFont(new java.awt.Font("Segoe UI Semibold", 1, 25)); // NOI18N
         buttonPPesquisar.setRadius(32);
+        buttonPPesquisar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonPPesquisarActionPerformed(evt);
+            }
+        });
 
         tableProdutos.setBackground(new java.awt.Color(255, 255, 255));
         tableProdutos.setFont(new java.awt.Font("Segoe UI Semibold", 1, 18)); // NOI18N
@@ -1662,7 +1709,7 @@ public class Cadastros extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "Código", "Produto", "Categoria", "Qtd Estoque", "Preço", "Descrição"
+                "ID", "Código", "Produto", "Categoria", "Qtd Est.", "Preço", "Descrição"
             }
         ) {
             Class[] types = new Class [] {
@@ -1686,25 +1733,25 @@ public class Cadastros extends javax.swing.JFrame {
         tableProdutos.setSelectionForeground(new java.awt.Color(0, 0, 0));
         jScrollPane4.setViewportView(tableProdutos);
         if (tableProdutos.getColumnModel().getColumnCount() > 0) {
-            tableProdutos.getColumnModel().getColumn(0).setMinWidth(80);
-            tableProdutos.getColumnModel().getColumn(0).setPreferredWidth(90);
-            tableProdutos.getColumnModel().getColumn(0).setMaxWidth(100);
-            tableProdutos.getColumnModel().getColumn(1).setMinWidth(110);
+            tableProdutos.getColumnModel().getColumn(0).setMinWidth(40);
+            tableProdutos.getColumnModel().getColumn(0).setPreferredWidth(70);
+            tableProdutos.getColumnModel().getColumn(0).setMaxWidth(80);
+            tableProdutos.getColumnModel().getColumn(1).setMinWidth(50);
             tableProdutos.getColumnModel().getColumn(1).setPreferredWidth(120);
             tableProdutos.getColumnModel().getColumn(1).setMaxWidth(130);
-            tableProdutos.getColumnModel().getColumn(2).setMinWidth(240);
+            tableProdutos.getColumnModel().getColumn(2).setMinWidth(100);
             tableProdutos.getColumnModel().getColumn(2).setPreferredWidth(250);
             tableProdutos.getColumnModel().getColumn(2).setMaxWidth(260);
-            tableProdutos.getColumnModel().getColumn(3).setMinWidth(190);
+            tableProdutos.getColumnModel().getColumn(3).setMinWidth(80);
             tableProdutos.getColumnModel().getColumn(3).setPreferredWidth(200);
             tableProdutos.getColumnModel().getColumn(3).setMaxWidth(210);
-            tableProdutos.getColumnModel().getColumn(4).setMinWidth(80);
+            tableProdutos.getColumnModel().getColumn(4).setMinWidth(40);
             tableProdutos.getColumnModel().getColumn(4).setPreferredWidth(90);
             tableProdutos.getColumnModel().getColumn(4).setMaxWidth(90);
-            tableProdutos.getColumnModel().getColumn(5).setMinWidth(140);
+            tableProdutos.getColumnModel().getColumn(5).setMinWidth(80);
             tableProdutos.getColumnModel().getColumn(5).setPreferredWidth(150);
             tableProdutos.getColumnModel().getColumn(5).setMaxWidth(160);
-            tableProdutos.getColumnModel().getColumn(6).setMinWidth(290);
+            tableProdutos.getColumnModel().getColumn(6).setMinWidth(100);
             tableProdutos.getColumnModel().getColumn(6).setPreferredWidth(300);
             tableProdutos.getColumnModel().getColumn(6).setMaxWidth(310);
         }
@@ -1736,6 +1783,11 @@ public class Cadastros extends javax.swing.JFrame {
         buttonExibirPEditar.setFocusable(false);
         buttonExibirPEditar.setFont(new java.awt.Font("Segoe UI Semibold", 1, 25)); // NOI18N
         buttonExibirPEditar.setRadius(32);
+        buttonExibirPEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonExibirPEditarActionPerformed(evt);
+            }
+        });
 
         buttonExibirPPesquisar.setForeground(new java.awt.Color(255, 255, 255));
         buttonExibirPPesquisar.setText("Excluir");
@@ -1745,6 +1797,11 @@ public class Cadastros extends javax.swing.JFrame {
         buttonExibirPPesquisar.setFocusable(false);
         buttonExibirPPesquisar.setFont(new java.awt.Font("Segoe UI Semibold", 1, 25)); // NOI18N
         buttonExibirPPesquisar.setRadius(32);
+        buttonExibirPPesquisar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonExibirPPesquisarActionPerformed(evt);
+            }
+        });
 
         buttonExibirPCad.setForeground(new java.awt.Color(255, 255, 255));
         buttonExibirPCad.setText("Cadastrar");
@@ -1754,6 +1811,11 @@ public class Cadastros extends javax.swing.JFrame {
         buttonExibirPCad.setFocusable(false);
         buttonExibirPCad.setFont(new java.awt.Font("Segoe UI Semibold", 1, 25)); // NOI18N
         buttonExibirPCad.setRadius(32);
+        buttonExibirPCad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonExibirPCadActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
@@ -2225,6 +2287,7 @@ public class Cadastros extends javax.swing.JFrame {
 
     private void buttonExibirPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExibirPActionPerformed
         viewChange("exibirProd");
+        listaProdutos();
     }//GEN-LAST:event_buttonExibirPActionPerformed
 
     private void buttonCadastrarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCadastrarClienteActionPerformed
@@ -2308,6 +2371,22 @@ public class Cadastros extends javax.swing.JFrame {
     private void buttonExibirFExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExibirFExcluirActionPerformed
         excluirFuncionarios();
     }//GEN-LAST:event_buttonExibirFExcluirActionPerformed
+
+    private void buttonExibirPCadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExibirPCadActionPerformed
+       viewChange("cadastroProd");
+    }//GEN-LAST:event_buttonExibirPCadActionPerformed
+
+    private void buttonExibirPEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExibirPEditarActionPerformed
+        editarProdutos();
+    }//GEN-LAST:event_buttonExibirPEditarActionPerformed
+
+    private void buttonPPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonPPesquisarActionPerformed
+        listaProdutos();
+    }//GEN-LAST:event_buttonPPesquisarActionPerformed
+
+    private void buttonExibirPPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExibirPPesquisarActionPerformed
+        excluirProdutos();
+    }//GEN-LAST:event_buttonExibirPPesquisarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

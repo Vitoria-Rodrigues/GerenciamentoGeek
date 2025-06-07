@@ -29,11 +29,11 @@ public class ProdutoDAO {
             em.getTransaction().begin();
             em.persist(produto);
             em.getTransaction().commit();
-            Alerta.Sucesso("Produto cadastrado com sucesso!", "Cadastro concluído!");            
+            Alerta.Sucesso("Cadastro concluído!", "Produto cadastrado com sucesso!");            
             
         } catch (Exception e) {
             em.getTransaction().rollback();
-            Alerta.Erro("Erro ao inserir o cadastro no banco", "Erro no cadastro");
+            Alerta.Erro("Erro", "Erro ao inserir o cadastro no banco");
         } finally {
             JPAUtil.closeEntityManager();
         }
@@ -75,6 +75,39 @@ public class ProdutoDAO {
             em.close();
         }
         return produto;
+    }
+    
+    public static void editarProduto(Produto produto) {
+        EntityManager em = JPAUtil.getEntityManager();
+
+        try {
+            em.getTransaction().begin();
+            em.merge(produto);
+            em.getTransaction().commit();
+            Alerta.Sucesso("Sucesso!", "Edição realizada com sucesso!");
+
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            Alerta.Erro("Erro ao editar", "Ocorreu um erro ao editar as informações");
+        } finally {
+            em.close();
+        }
+    }
+    
+    public static void excluirProdutos(String id) {
+        EntityManager em = JPAUtil.getEntityManager();
+
+        try {
+            em.getTransaction().begin();
+            Produto produtosRemover = em.find(Produto.class, id);
+            em.remove(produtosRemover);
+            em.getTransaction().commit();
+
+        } catch (Exception e) {
+            Alerta.Erro("Erro excluir", "Erro ao excluir o produto no banco");
+        } finally {
+            JPAUtil.closeEntityManager();
+        }
     }
     
 }
