@@ -55,12 +55,12 @@
                   <EmptySpace max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
-                          <Component id="jLabel2" min="-2" pref="250" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="358" max="-2" attributes="0"/>
+                          <Component id="buttonEnviar" min="-2" pref="165" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="395" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
-                          <Component id="buttonEnviar" min="-2" pref="165" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="388" max="-2" attributes="0"/>
+                          <Component id="jLabel2" min="-2" pref="250" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="358" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -72,11 +72,11 @@
                   <Component id="jLabel2" min="-2" pref="250" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
                   <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
                   <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="64" max="-2" attributes="0"/>
                   <Component id="buttonEnviar" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="41" max="32767" attributes="0"/>
+                  <EmptySpace pref="77" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -169,9 +169,9 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
-                      <Component id="pfPassword" max="32767" attributes="0"/>
-                      <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+                      <Component id="tfSenha" min="-2" pref="665" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -181,9 +181,9 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="pfPassword" alignment="3" max="32767" attributes="0"/>
+                          <Component id="tfSenha" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="15" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -200,20 +200,20 @@
                 <Property name="text" type="java.lang.String" value="Senha:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JPasswordField" name="pfPassword">
+            <Component class="javax.swing.JTextField" name="tfSenha">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="e4" green="e4" red="e4" type="rgb"/>
                 </Property>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Segoe UI Semilight" size="35" style="1"/>
+                  <Font name="Segoe UI Semilight" size="35" style="0"/>
                 </Property>
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="0" green="0" red="0" type="rgb"/>
                 </Property>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                    <LineBorder>
+                    <LineBorder roundedCorners="true">
                       <Color PropertyName="color" blue="e4" green="e4" red="e4" type="rgb"/>
                     </LineBorder>
                   </Border>
@@ -239,7 +239,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI Semibold" size="30" style="1"/>
             </Property>
-            <Property name="radius" type="int" value="40"/>
+            <Property name="radius" type="int" value="32"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonEnviarActionPerformed"/>

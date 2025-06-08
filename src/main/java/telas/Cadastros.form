@@ -1481,9 +1481,6 @@
                               <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" attributes="0">
                                   <Group type="102" attributes="0">
-                                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                                      <Component id="buttonVLimpar1" min="-2" pref="140" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="331" max="-2" attributes="0"/>
                                       <Component id="buttonVLimpar" min="-2" pref="140" max="-2" attributes="0"/>
                                       <EmptySpace max="32767" attributes="0"/>
                                       <Component id="buttonVPagar" min="-2" pref="140" max="-2" attributes="0"/>
@@ -1537,14 +1534,14 @@
                                   <Component id="tfVendaCPF" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="buttonVPesquisarCPF" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="tfVendaData" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="jLabel15" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="tfVendaProduto" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="jLabel13" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jLabel14" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="tfVendaCodigo" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -1560,13 +1557,12 @@
                               </Group>
                               <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
                               <Component id="jScrollPane2" min="-2" pref="240" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="buttonVPagar" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="buttonVLimpar" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="buttonVLimpar1" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="21" max="32767" attributes="0"/>
+                              <EmptySpace pref="15" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1801,7 +1797,7 @@
                                 <Column editable="false" title="SubTotal" type="java.lang.Double"/>
                               </Table>
                             </Property>
-                            <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor" postCode="DefaultTableCellRenderer centralizarTable = new DefaultTableCellRenderer();&#xa;centralizarTable.setHorizontalAlignment(SwingConstants.CENTER);&#xa;tableVenda.getTableHeader().setReorderingAllowed(false);&#xa;        &#xa;        for (int i = 0; i &lt; tableVenda.getColumnCount(); i++) {&#xa;            tableVenda.getColumnModel().getColumn(i).setCellRenderer(centralizarTable);&#xa;        }&#xa;&#xa;TableCellRenderer baseRender4 = tableVenda.getTableHeader().getDefaultRenderer();&#xa;        tableVenda.getTableHeader().setDefaultRenderer((tbl, value, isSelected, hasFocus, row, column) -&gt; {&#xa;            JComponent comp = (JComponent) baseRender4.getTableCellRendererComponent(tbl, value, isSelected, hasFocus, row, column);&#xa;            comp.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));&#xa;            return comp;&#xa;        });&#xa;tableVenda.setIntercellSpacing(new Dimension(0, 0));&#xa;tableVenda.setForeground(new java.awt.Color(0, 0, 0));&#xa;tableVenda.getTableHeader().setBackground(new Color(0, 64, 121));&#xa;tableVenda.getTableHeader().setForeground(new Color(255, 255,255));&#xa;tableVenda.getTableHeader().setSize(50, 50);&#xa;tableVenda.setShowVerticalLines(false);&#xa;tableVenda.getTableHeader().setFont( new Font(&quot;Segoe UI Semibold&quot;,Font.BOLD, 18));">
+                            <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor" postCode="DefaultTableCellRenderer centralizarTable = new DefaultTableCellRenderer();&#xa;centralizarTable.setHorizontalAlignment(SwingConstants.CENTER);&#xa;        &#xa;        for (int i = 0; i &lt; tableVenda.getColumnCount(); i++) {&#xa;            tableVenda.getColumnModel().getColumn(i).setCellRenderer(centralizarTable);&#xa;        }&#xa;&#xa;TableCellRenderer baseRender4 = tableVenda.getTableHeader().getDefaultRenderer();&#xa;        tableVenda.getTableHeader().setDefaultRenderer((tbl, value, isSelected, hasFocus, row, column) -&gt; {&#xa;            JComponent comp = (JComponent) baseRender4.getTableCellRendererComponent(tbl, value, isSelected, hasFocus, row, column);&#xa;            comp.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));&#xa;            return comp;&#xa;        });&#xa;tableVenda.setIntercellSpacing(new Dimension(0, 0));&#xa;tableVenda.setForeground(new java.awt.Color(0, 0, 0));&#xa;tableVenda.getTableHeader().setBackground(new Color(0, 64, 121));&#xa;tableVenda.getTableHeader().setForeground(new Color(255, 255,255));&#xa;tableVenda.getTableHeader().setSize(50, 50);&#xa;tableVenda.setShowVerticalLines(false);&#xa;tableVenda.getTableHeader().setFont( new Font(&quot;Segoe UI Semibold&quot;,Font.BOLD, 18));">
                               <TableColumnModel selectionModel="0">
                                 <Column maxWidth="110" minWidth="90" prefWidth="100" resizable="true">
                                   <Title/>
@@ -1868,24 +1864,6 @@
                       </Properties>
                     </Component>
                     <Component class="customs.botaoBorda" name="buttonVLimpar">
-                      <Properties>
-                        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="ff" green="ff" red="ff" type="rgb"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="Excluir"/>
-                        <Property name="borderPainted" type="boolean" value="false"/>
-                        <Property name="cor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="66" green="33" red="0" type="rgb"/>
-                        </Property>
-                        <Property name="focusPainted" type="boolean" value="false"/>
-                        <Property name="focusable" type="boolean" value="false"/>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Segoe UI Semibold" size="25" style="1"/>
-                        </Property>
-                        <Property name="radius" type="int" value="32"/>
-                      </Properties>
-                    </Component>
-                    <Component class="customs.botaoBorda" name="buttonVLimpar1">
                       <Properties>
                         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="ff" green="ff" red="ff" type="rgb"/>
