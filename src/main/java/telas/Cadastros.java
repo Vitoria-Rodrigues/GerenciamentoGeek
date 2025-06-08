@@ -6,9 +6,11 @@ import classes.Cliente;
 import classes.Funcionario;
 import classes.Login;
 import classes.Produto;
+import classes.Venda;
 import classesDAO.ClienteDAO;
 import classesDAO.FuncionarioDAO;
 import classesDAO.ProdutoDAO;
+import classesDAO.VendaDAO;
 import customs.botaoBorda;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -23,19 +25,38 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import utilitarios.criptografia;
 import validacao.Alerta;
 
 public class Cadastros extends javax.swing.JFrame {
 
-    List<Cargo> listaCargos = FuncionarioDAO.pegarCargos();
-    List<Categoria> listaCategorias = ProdutoDAO.pegarCategoria();
+    private List<Cargo> listaCargos = FuncionarioDAO.pegarCargos();
+    private List<Categoria> listaCategorias = ProdutoDAO.pegarCategoria();
+    private Funcionario funcionario;
 
-    public Cadastros(String menuP) {
+    public Cadastros(String menuP, Login login) {
         initComponents();
+        this.funcionario = login.getFuncionario();
+        definirRestricoes(login);
         montarComboboxCargos();
         montarComboboxCategorias();
         viewChange(menuP);
     }
+
+    public void definirRestricoes(Login login) {
+        if (login.getFuncionario() == null) {
+            Alerta.Sucesso("Bem vindo", "Bem vindo Adm!");
+            
+            }else if (login.getFuncionario().getCargo().getFuncao().equals("Atendente")) {
+                buttonCadastrarF.setVisible(false);
+                buttonExibirF.setVisible(false);
+
+            } else if (login.getFuncionario().getCargo().getFuncao().equals("Caixa")) {
+                buttonCadastrarF.setVisible(false);
+                buttonExibirF.setVisible(false);
+            }
+        }
+
 
     public void viewChange(String cardName) {  //Método para mudar os cardLayout de acordo com os botões correspondentes da sidebar
         CardLayout layout = (CardLayout) panelTelas.getLayout();
@@ -127,11 +148,13 @@ public class Cadastros extends javax.swing.JFrame {
     }
 
     public void cadastroFuncionario() { //Método para cadastrar o funcionário no banco de dados
+        String passwordFunc = tfFSenha.getText();
+        
         if (tfFNome.getText().isBlank() && tfFCpf.getText().isBlank()
                 && tfFCep.getText().isBlank() && tfFLogradouro.getText().isBlank()
-                && tfFNum.getText().isBlank() && tfFComplemento.getText().isBlank() 
+                && tfFNum.getText().isBlank() && tfFComplemento.getText().isBlank()
                 && tfFLogin.getText().isBlank()
-                && tfFSenha.getText().isBlank()) {
+                && passwordFunc.isBlank()) {
             Alerta.Erro("Campo vazio", "Por favor, inserir os dados");
         } else if (tfFNome.getText().isBlank()) {
             Alerta.Erro("Campo vazio", "Por favor, inserir o nome");
@@ -140,20 +163,20 @@ public class Cadastros extends javax.swing.JFrame {
         } else if (tfFCep.getText().isBlank()) {
             Alerta.Erro("Campo vazio", "Por favor, inserir o CEP");
         } else if (tfFLogradouro.getText().isBlank()) {
-            Alerta.Erro("Campo vazio", "Por favor, inserir o logradouro" );
+            Alerta.Erro("Campo vazio", "Por favor, inserir o logradouro");
         } else if (tfFNum.getText().isBlank()) {
             Alerta.Erro("Campo vazio", "Por favor, inserir o numero");
         } else if (tfFComplemento.getText().isBlank()) {
             Alerta.Erro("Campo vazio", "Por favor, inserir o complemento");
         } else if (tfFLogin.getText().isBlank()) {
             Alerta.Erro("Campo vazio", "Por favor, inserir o login");
-        } else if (tfFSenha.getText().isBlank()) {
+        } else if (passwordFunc.isBlank()) {
             Alerta.Erro("Campo vazio", "Por favor, inserir a senha");
         } else {
 
             Login log = new Login();
             log.setLogin(tfFLogin.getText());
-            log.setSenha(tfFSenha.getText());
+            log.setSenha(criptografia.toMD5(passwordFunc));
 
             Cargo cargoselecionado = (Cargo) listaCargos.stream()
                     .filter(cargo -> cargo.getFuncao().equals(cbFCargos.getSelectedItem().toString()))
@@ -223,6 +246,42 @@ public class Cadastros extends javax.swing.JFrame {
         }
     }
 
+    public void cadastroVenda() { //Método para cadastrar a venda no banco de dados
+        if (tfVendaCPF.getText().isBlank() && tfVendaCodigo.getText().isBlank()
+                && tfVendaPreco.getText().isBlank() && tfVendaProduto.getText().isBlank()
+                && tfVendaQtd.getText().isBlank()) {
+            Alerta.Erro("Campo vazio", "Por favor, inserir as informações");
+        } else if (tfVendaCPF.getText().isBlank()) {
+            Alerta.Erro("Campo vazio", "Por favor, inserir o CPF");
+        } else if (tfVendaCodigo.getText().isBlank()) {
+            Alerta.Erro("Campo vazio", "Por favor, inserir o Código");
+        } else if (tfVendaPreco.getText().isBlank()) {
+            Alerta.Erro("Campo vazio", "Por favor, inserir o Preço");
+        } else if (tfVendaProduto.getText().isBlank()) {
+            Alerta.Erro("Campo vazio", "Por favor, inserir o Produto");
+        } else if (tfVendaQtd.getText().isBlank()) {
+            Alerta.Erro("Campo vazio", "Por favor, inserir a Quantidade");
+        } else {
+
+            Cliente cli = new Cliente();
+            cli.setCpfC(tfVendaCPF.getText());
+
+            Produto prod = new Produto();
+            prod.setCodigoProd(Integer.parseInt(tfVendaCodigo.getText()));
+            prod.setPreco(Double.parseDouble(tfVendaPreco.getText()));
+            prod.setNomeProd(tfVendaProduto.getText());
+
+            Venda venda = new Venda();
+            venda.setCliente(cli);
+
+            VendaDAO.cadastrarVenda(venda);
+
+            limparCampos(tfCadastroPNome, tfCadastroPPreco, tfCadastroPCod, tfCadastroPEstoque);
+            taCadastroPDesc.setText("");
+
+        }
+    }
+
     public void listaClientes() { //Método para listar os clientes que foram cadastrados no banco de dados
         DefaultTableModel modelo = (DefaultTableModel) tableClientes.getModel();
         modelo.setRowCount(0);
@@ -250,16 +309,16 @@ public class Cadastros extends javax.swing.JFrame {
         }
         tableFuncionarios.setModel(modelo);
     }
-    
-    public void listaProdutos(){  //Método para listar os produtos que foram cadastrados no banco de dados
+
+    public void listaProdutos() {  //Método para listar os produtos que foram cadastrados no banco de dados
         DefaultTableModel modelo = (DefaultTableModel) tableProdutos.getModel();
         modelo.setRowCount(0);
         List<Produto> lista = ProdutoDAO.listarProdutos(tfBuscarProdutos.getText());
-        
-        for(Produto produto : lista){
+
+        for (Produto produto : lista) {
             String[] linha = {produto.getId().toString(), String.valueOf(produto.getCodigoProd()), produto.getNomeProd(),
-            produto.getCategoria().getNomeCateg(), String.valueOf(produto.getQtdEstoque()), 
-            String.valueOf(produto.getPreco()), produto.getDescProd()};
+                produto.getCategoria().getNomeCateg(), String.valueOf(produto.getQtdEstoque()),
+                String.valueOf(produto.getPreco()), produto.getDescProd()};
             modelo.addRow(linha);
         }
         tableProdutos.setModel(modelo);
@@ -322,7 +381,7 @@ public class Cadastros extends javax.swing.JFrame {
         }
         listaClientes();
     }
-    
+
     public void excluirFuncionarios() { ////Método para excluir os funcionarios que foram cadastrados no banco de dados
         int linhaSelecionada = tableFuncionarios.getSelectedRow();
 
@@ -335,7 +394,7 @@ public class Cadastros extends javax.swing.JFrame {
         }
         listaFuncionarios();
     }
-    
+
     public void excluirProdutos() { ////Método para excluir os produtos que foram cadastrados no banco de dados
         int linhaSelecionada = tableProdutos.getSelectedRow();
 
@@ -440,6 +499,7 @@ public class Cadastros extends javax.swing.JFrame {
         tableVenda = new javax.swing.JTable();
         buttonVPagar = new customs.botaoBorda();
         buttonVLimpar = new customs.botaoBorda();
+        buttonVLimpar1 = new customs.botaoBorda();
         panelExibirClientes = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
         jLabel18 = new javax.swing.JLabel();
@@ -1357,6 +1417,7 @@ public class Cadastros extends javax.swing.JFrame {
         }
         DefaultTableCellRenderer centralizarTable = new DefaultTableCellRenderer();
         centralizarTable.setHorizontalAlignment(SwingConstants.CENTER);
+        tableVenda.getTableHeader().setReorderingAllowed(false);
 
         for (int i = 0; i < tableVenda.getColumnCount(); i++) {
             tableVenda.getColumnModel().getColumn(i).setCellRenderer(centralizarTable);
@@ -1386,13 +1447,22 @@ public class Cadastros extends javax.swing.JFrame {
         buttonVPagar.setRadius(32);
 
         buttonVLimpar.setForeground(new java.awt.Color(255, 255, 255));
-        buttonVLimpar.setText("Limpar");
+        buttonVLimpar.setText("Excluir");
         buttonVLimpar.setBorderPainted(false);
         buttonVLimpar.setCor(new java.awt.Color(0, 51, 102));
         buttonVLimpar.setFocusPainted(false);
         buttonVLimpar.setFocusable(false);
         buttonVLimpar.setFont(new java.awt.Font("Segoe UI Semibold", 1, 25)); // NOI18N
         buttonVLimpar.setRadius(32);
+
+        buttonVLimpar1.setForeground(new java.awt.Color(255, 255, 255));
+        buttonVLimpar1.setText("Limpar");
+        buttonVLimpar1.setBorderPainted(false);
+        buttonVLimpar1.setCor(new java.awt.Color(0, 51, 102));
+        buttonVLimpar1.setFocusPainted(false);
+        buttonVLimpar1.setFocusable(false);
+        buttonVLimpar1.setFont(new java.awt.Font("Segoe UI Semibold", 1, 25)); // NOI18N
+        buttonVLimpar1.setRadius(32);
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -1402,6 +1472,9 @@ public class Cadastros extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(buttonVLimpar1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(331, 331, 331)
                         .addComponent(buttonVLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(buttonVPagar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1444,13 +1517,13 @@ public class Cadastros extends javax.swing.JFrame {
                     .addComponent(jLabel12)
                     .addComponent(tfVendaCPF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(buttonVPesquisarCPF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(45, 45, 45)
+                .addGap(30, 30, 30)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tfVendaData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel15)
                     .addComponent(tfVendaProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel13))
-                .addGap(27, 27, 27)
+                .addGap(30, 30, 30)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
                     .addComponent(tfVendaCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1464,11 +1537,12 @@ public class Cadastros extends javax.swing.JFrame {
                     .addComponent(buttonVAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(45, 45, 45)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buttonVPagar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buttonVLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(15, Short.MAX_VALUE))
+                    .addComponent(buttonVLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buttonVLimpar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout panelVendaLayout = new javax.swing.GroupLayout(panelVenda);
@@ -2373,7 +2447,7 @@ public class Cadastros extends javax.swing.JFrame {
     }//GEN-LAST:event_buttonExibirFExcluirActionPerformed
 
     private void buttonExibirPCadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExibirPCadActionPerformed
-       viewChange("cadastroProd");
+        viewChange("cadastroProd");
     }//GEN-LAST:event_buttonExibirPCadActionPerformed
 
     private void buttonExibirPEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExibirPEditarActionPerformed
@@ -2421,6 +2495,7 @@ public class Cadastros extends javax.swing.JFrame {
     private customs.botaoBorda buttonSair;
     private customs.botaoBorda buttonVAdicionar;
     private customs.botaoBorda buttonVLimpar;
+    private customs.botaoBorda buttonVLimpar1;
     private customs.botaoBorda buttonVPagar;
     private customs.botaoBorda buttonVPesquisar;
     private customs.botaoBorda buttonVPesquisarAdc1;

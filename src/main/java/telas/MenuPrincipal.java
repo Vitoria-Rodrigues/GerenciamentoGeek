@@ -1,20 +1,32 @@
-
 package telas;
 
 import classes.Login;
-
+import validacao.Alerta;
 
 public class MenuPrincipal extends javax.swing.JFrame {
+    
+    private Login login;
 
-        Login login;
-        
     public MenuPrincipal(Login login) {
         initComponents();
         this.login = login;
+        definirRestricoes(login);
     }
-    
-    
+    public void definirRestricoes(Login login) {
+        if (login.getFuncionario() == null) {
+            
+            }else if (login.getFuncionario().getCargo().getFuncao().equals("Atendente")) {
+                
+                buttonCadastrarF.setVisible(false);
+                buttonExibirF.setVisible(false);
 
+            } else if (login.getFuncionario().getCargo().getFuncao().equals("Caixa")) {
+                
+                buttonCadastrarF.setVisible(false);
+                buttonExibirF.setVisible(false);
+            }
+        }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -194,63 +206,30 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonCadastrarFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCadastrarFActionPerformed
-        new Cadastros("cadastroFunc").setVisible(true);
+        new Cadastros("cadastroFunc", login).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_buttonCadastrarFActionPerformed
 
     private void buttonCadastrarCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCadastrarCActionPerformed
-        new Cadastros("cadastroCli").setVisible(true);
+        new Cadastros("cadastroCli", login).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_buttonCadastrarCActionPerformed
 
     private void buttonCadastrarPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCadastrarPActionPerformed
-        new Cadastros("cadastroProd").setVisible(true);
+        new Cadastros("cadastroProd", login).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_buttonCadastrarPActionPerformed
 
     private void buttonCadastrarVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCadastrarVActionPerformed
-        new Cadastros("cadastroVenda").setVisible(true);
+        new Cadastros("cadastroVenda", login).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_buttonCadastrarVActionPerformed
 
     private void buttonExibirFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExibirFActionPerformed
-        new Cadastros("exibirFunc").setVisible(true);
+        new Cadastros("exibirFunc", login).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_buttonExibirFActionPerformed
 
-    
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private customs.botaoBorda buttonCadastrarC;

@@ -6,6 +6,7 @@ import classes.Funcionario;
 import classesDAO.FuncionarioDAO;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import utilitarios.criptografia;
 import validacao.Alerta;
 
 
@@ -31,7 +32,6 @@ public class EditarCadastroFuncionario extends javax.swing.JDialog {
         tfEditarFComplemento.setText(funcionario.getComplemento());
         cbEditarFCargo.setSelectedItem(funcionario.getCargo());
         tfEditarFLogin.setText(funcionario.getLogin().getLogin());
-        tfEditarFSenha.setText(funcionario.getLogin().getSenha());
     }
     public void montarComboboxCargos() { //Método para montar um combobox com uma lista de Cargos que vem do banco de dados
         DefaultComboBoxModel modelo = (DefaultComboBoxModel) cbEditarFCargo.getModel();
@@ -43,11 +43,13 @@ public class EditarCadastroFuncionario extends javax.swing.JDialog {
     }
     
     public void salvarEdicao(){
+        String passwordFunc = tfEditarFSenha.getText();
+        
         if (tfEditarFNome.getText().isBlank() && tfEditarFCPF.getText().isBlank()
                 && tfEditarFCEP.getText().isBlank() && tfEditarFLogradouro.getText().isBlank()
                 && tfEditarFNum.getText().isBlank() && tfEditarFComplemento.getText().isBlank() 
                 && tfEditarFLogin.getText().isBlank()
-                && tfEditarFSenha.getText().isBlank()) {
+                && passwordFunc.isBlank()) {
             Alerta.Erro("Campo vazio", "Por favor, inserir os dados");
         } else if (tfEditarFNome.getText().isBlank()) {
             Alerta.Erro("Campo vazio", "Por favor, inserir o nome");
@@ -63,7 +65,7 @@ public class EditarCadastroFuncionario extends javax.swing.JDialog {
             Alerta.Erro("Campo vazio", "Por favor, inserir o complemento");
         } else if (tfEditarFLogin.getText().isBlank()) {
             Alerta.Erro("Campo vazio", "Por favor, inserir o login");
-        } else if (tfEditarFSenha.getText().isBlank()) {
+        } else if (passwordFunc.isBlank()) {
             Alerta.Erro("Campo vazio", "Por favor, inserir a senha");
         } else {
             
@@ -81,7 +83,7 @@ public class EditarCadastroFuncionario extends javax.swing.JDialog {
             funcionario.setTelefoneF(tfEditarFTel.getText());
             funcionario.setCargo(cargoselecionado);
             funcionario.getLogin().setLogin(tfEditarFLogin.getText());
-            funcionario.getLogin().setSenha(tfEditarFSenha.getText());
+            funcionario.getLogin().setSenha(criptografia.toMD5(passwordFunc));
             
             FuncionarioDAO.editarFuncionario(funcionario);
         }
@@ -343,6 +345,7 @@ public class EditarCadastroFuncionario extends javax.swing.JDialog {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void cbEditarFCargoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbEditarFCargoActionPerformed
