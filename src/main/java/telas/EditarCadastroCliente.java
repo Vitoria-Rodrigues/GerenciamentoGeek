@@ -59,6 +59,7 @@ public class EditarCadastroCliente extends javax.swing.JDialog {
         buttonEditarSalvar = new customs.botaoBorda();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(245, 245, 245));
 

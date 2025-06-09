@@ -1480,7 +1480,7 @@
                           <Group type="102" alignment="1" attributes="0">
                               <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" attributes="0">
-                                  <Group type="102" attributes="0">
+                                  <Group type="102" alignment="1" attributes="0">
                                       <Component id="buttonVLimpar" min="-2" pref="140" max="-2" attributes="0"/>
                                       <EmptySpace max="32767" attributes="0"/>
                                       <Component id="buttonVPagar" min="-2" pref="140" max="-2" attributes="0"/>
@@ -1711,6 +1711,9 @@
                         </Property>
                         <Property name="radius" type="int" value="32"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonVAdicionarActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="customs.botaoBorda" name="buttonVPesquisarCod">
                       <Properties>
@@ -1729,6 +1732,9 @@
                         </Property>
                         <Property name="radius" type="int" value="32"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonVPesquisarCodActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JTextField" name="tfVendaData">
                       <Properties>
@@ -1742,6 +1748,9 @@
                           <Color blue="0" green="0" red="0" type="rgb"/>
                         </Property>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tfVendaDataActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JTextField" name="tfVendaCPF">
                       <Properties>
@@ -1788,10 +1797,9 @@
                               <Color blue="0" green="0" red="0" type="rgb"/>
                             </Property>
                             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                              <Table columnCount="6" rowCount="4">
+                              <Table columnCount="5" rowCount="4">
                                 <Column editable="false" title="C&#xf3;digo" type="java.lang.Integer"/>
                                 <Column editable="false" title="Produto" type="java.lang.String"/>
-                                <Column editable="false" title="Data" type="java.lang.String"/>
                                 <Column editable="false" title="Qtd" type="java.lang.Integer"/>
                                 <Column editable="false" title="Pre&#xe7;o" type="java.lang.Double"/>
                                 <Column editable="false" title="SubTotal" type="java.lang.Double"/>
@@ -1805,11 +1813,6 @@
                                   <Renderer/>
                                 </Column>
                                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                  <Title/>
-                                  <Editor/>
-                                  <Renderer/>
-                                </Column>
-                                <Column maxWidth="160" minWidth="140" prefWidth="150" resizable="true">
                                   <Title/>
                                   <Editor/>
                                   <Renderer/>
@@ -1862,6 +1865,9 @@
                         </Property>
                         <Property name="radius" type="int" value="32"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonVPagarActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="customs.botaoBorda" name="buttonVLimpar">
                       <Properties>
@@ -1923,7 +1929,7 @@
                                       <EmptySpace max="32767" attributes="0"/>
                                       <Component id="buttonExibirCEditar" min="-2" pref="135" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="364" max="-2" attributes="0"/>
-                                      <Component id="buttonExibirCPesquisar" min="-2" pref="135" max="-2" attributes="0"/>
+                                      <Component id="buttonExibirCExcluir" min="-2" pref="135" max="-2" attributes="0"/>
                                   </Group>
                                   <Component id="jScrollPane3" alignment="1" max="32767" attributes="0"/>
                                   <Group type="102" alignment="1" attributes="0">
@@ -1931,7 +1937,7 @@
                                       <EmptySpace pref="66" max="32767" attributes="0"/>
                                       <Component id="tfBuscarClientes" min="-2" pref="840" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-                                      <Component id="buttonVPesquisarAdc1" min="-2" max="-2" attributes="0"/>
+                                      <Component id="buttonVPesquisarAdc" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
@@ -1945,7 +1951,7 @@
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jLabel18" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="tfBuscarClientes" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="buttonVPesquisarAdc1" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="buttonVPesquisarAdc" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="jScrollPane3" min="-2" pref="480" max="-2" attributes="0"/>
@@ -1953,7 +1959,7 @@
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="buttonExibirCCad" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="buttonExibirCEditar" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="buttonExibirCPesquisar" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="buttonExibirCExcluir" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
                           </Group>
@@ -1985,7 +1991,7 @@
                         </Property>
                       </Properties>
                     </Component>
-                    <Component class="customs.botaoBorda" name="buttonVPesquisarAdc1">
+                    <Component class="customs.botaoBorda" name="buttonVPesquisarAdc">
                       <Properties>
                         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="ff" green="ff" red="ff" type="rgb"/>
@@ -2003,7 +2009,7 @@
                         <Property name="radius" type="int" value="32"/>
                       </Properties>
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonVPesquisarAdc1ActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonVPesquisarAdcActionPerformed"/>
                       </Events>
                     </Component>
                     <Container class="javax.swing.JScrollPane" name="jScrollPane3">
@@ -2098,7 +2104,7 @@
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonExibirCEditarActionPerformed"/>
                       </Events>
                     </Component>
-                    <Component class="customs.botaoBorda" name="buttonExibirCPesquisar">
+                    <Component class="customs.botaoBorda" name="buttonExibirCExcluir">
                       <Properties>
                         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="ff" green="ff" red="ff" type="rgb"/>
@@ -2116,7 +2122,7 @@
                         <Property name="radius" type="int" value="32"/>
                       </Properties>
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonExibirCPesquisarActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonExibirCExcluirActionPerformed"/>
                       </Events>
                     </Component>
                     <Component class="customs.botaoBorda" name="buttonExibirCCad">
@@ -2182,7 +2188,7 @@
                                       <EmptySpace max="32767" attributes="0"/>
                                       <Component id="buttonExibirPEditar" min="-2" pref="135" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="359" max="-2" attributes="0"/>
-                                      <Component id="buttonExibirPPesquisar" min="-2" pref="145" max="-2" attributes="0"/>
+                                      <Component id="buttonExibirPExcluir" min="-2" pref="145" max="-2" attributes="0"/>
                                   </Group>
                                   <Component id="jScrollPane4" alignment="1" max="32767" attributes="0"/>
                                   <Group type="102" alignment="1" attributes="0">
@@ -2212,7 +2218,7 @@
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="buttonExibirPCad" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="buttonExibirPEditar" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="buttonExibirPPesquisar" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="buttonExibirPExcluir" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
                           </Group>
@@ -2369,7 +2375,7 @@
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonExibirPEditarActionPerformed"/>
                       </Events>
                     </Component>
-                    <Component class="customs.botaoBorda" name="buttonExibirPPesquisar">
+                    <Component class="customs.botaoBorda" name="buttonExibirPExcluir">
                       <Properties>
                         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="ff" green="ff" red="ff" type="rgb"/>
@@ -2387,7 +2393,7 @@
                         <Property name="radius" type="int" value="32"/>
                       </Properties>
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonExibirPPesquisarActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonExibirPExcluirActionPerformed"/>
                       </Events>
                     </Component>
                     <Component class="customs.botaoBorda" name="buttonExibirPCad">
@@ -2450,17 +2456,15 @@
                               <Group type="103" groupAlignment="1" attributes="0">
                                   <Group type="102" alignment="1" attributes="0">
                                       <Component id="buttonExibirVCad" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace pref="372" max="32767" attributes="0"/>
-                                      <Component id="buttonExibirVEditar" min="-2" pref="135" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="368" max="-2" attributes="0"/>
-                                      <Component id="buttonExibirVEditar1" min="-2" pref="135" max="-2" attributes="0"/>
+                                      <EmptySpace max="32767" attributes="0"/>
+                                      <Component id="buttonExibirVExcluir" min="-2" pref="135" max="-2" attributes="0"/>
                                   </Group>
                                   <Component id="jScrollPane5" alignment="1" max="32767" attributes="0"/>
                                   <Group type="102" alignment="1" attributes="0">
                                       <Component id="jLabel20" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                                       <Component id="tfBuscarVendas" min="-2" pref="835" max="-2" attributes="0"/>
-                                      <EmptySpace max="32767" attributes="0"/>
+                                      <EmptySpace pref="29" max="32767" attributes="0"/>
                                       <Component id="buttonVPesquisar" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
@@ -2482,8 +2486,7 @@
                               <EmptySpace pref="44" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="buttonExibirVCad" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="buttonExibirVEditar" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="buttonExibirVEditar1" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="buttonExibirVExcluir" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
                           </Group>
@@ -2532,6 +2535,9 @@
                         </Property>
                         <Property name="radius" type="int" value="32"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonVPesquisarActionPerformed"/>
+                      </Events>
                     </Component>
                     <Container class="javax.swing.JScrollPane" name="jScrollPane5">
                       <AuxValues>
@@ -2604,24 +2610,6 @@
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Component class="customs.botaoBorda" name="buttonExibirVEditar">
-                      <Properties>
-                        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="ff" green="ff" red="ff" type="rgb"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="Editar"/>
-                        <Property name="borderPainted" type="boolean" value="false"/>
-                        <Property name="cor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="66" green="33" red="0" type="rgb"/>
-                        </Property>
-                        <Property name="focusPainted" type="boolean" value="false"/>
-                        <Property name="focusable" type="boolean" value="false"/>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Segoe UI Semibold" size="25" style="1"/>
-                        </Property>
-                        <Property name="radius" type="int" value="32"/>
-                      </Properties>
-                    </Component>
                     <Component class="customs.botaoBorda" name="buttonExibirVCad">
                       <Properties>
                         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -2640,7 +2628,7 @@
                         <Property name="radius" type="int" value="32"/>
                       </Properties>
                     </Component>
-                    <Component class="customs.botaoBorda" name="buttonExibirVEditar1">
+                    <Component class="customs.botaoBorda" name="buttonExibirVExcluir">
                       <Properties>
                         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="ff" green="ff" red="ff" type="rgb"/>
@@ -2657,6 +2645,9 @@
                         </Property>
                         <Property name="radius" type="int" value="32"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonExibirVExcluirActionPerformed"/>
+                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>

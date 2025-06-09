@@ -1,6 +1,7 @@
 
 package classes;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -29,6 +31,9 @@ public class Venda {
     @Column(name = "totalVenda")
     private Double totalVenda;
     
+    @Column(name = "qtdVenda")
+    private int qtdVenda;
+    
     @ManyToOne
     @JoinColumn(name = "cliente_id", unique = true)
     private Cliente cliente;
@@ -37,9 +42,12 @@ public class Venda {
     @JoinColumn(name = "funcionario_id", unique = true)
     private Funcionario funcionario;
     
+    @OneToOne(mappedBy = "venda", cascade=CascadeType.PERSIST)
+    private FormaPagamento formapagamento;
+    
     @ManyToMany
     @JoinTable(
-        name = "item_venda",
+        name = "tbItemVenda",
         joinColumns = @JoinColumn(name = "venda_id"),
         inverseJoinColumns = @JoinColumn(name = "produto_id")
     ) 
@@ -93,5 +101,20 @@ public class Venda {
         this.prod = prod;
     }
 
+    public int getQtdVenda() {
+        return qtdVenda;
+    }
+
+    public void setQtdVenda(int qtdVenda) {
+        this.qtdVenda = qtdVenda;
+    }
+
+    public FormaPagamento getFormapagamento() {
+        return formapagamento;
+    }
+
+    public void setFormapagamento(FormaPagamento formapagamento) {
+        this.formapagamento = formapagamento;
+    }
     
 }

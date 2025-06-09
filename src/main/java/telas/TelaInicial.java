@@ -2,6 +2,7 @@ package telas;
 
 import classes.Login;
 import classesDAO.LoginDAO;
+import utilitarios.criptografia;
 import validacao.Alerta;
 
 public class TelaInicial extends javax.swing.JFrame {
@@ -11,16 +12,18 @@ public class TelaInicial extends javax.swing.JFrame {
     }
 
     public void Logins() {
-        if (tfLogin.getText().isBlank()) {
-            Alerta.Erro("Campo vazio", "Digite o Login");
-        } else if (tfSenha.getText().isBlank()) {
-            Alerta.Erro("Campo vazio", "Digite a Senha");
+        String passwordLogin = new String (pfPassword.getPassword());
+        
+        if (passwordLogin.isBlank()) {
+            Alerta.Erro("Campo vazio", "Digite o Senha");
+        } else if (tfLogin.getText().isBlank()) {
+            Alerta.Erro("Campo vazio", "Digite a Login");
         } else {
             LoginDAO loginDAO = new LoginDAO();
-            if (loginDAO.usuario(tfLogin.getText(), tfSenha.getText()) == null) {
+            if (loginDAO.usuario(tfLogin.getText(), criptografia.toMD5(passwordLogin)) == null) {
                 Alerta.Erro("Erro", "Ocorreu um erro ao realizar o login");
             } else {
-                Login login = loginDAO.usuario(tfLogin.getText(), tfSenha.getText());
+                Login login = loginDAO.usuario(tfLogin.getText(), criptografia.toMD5(passwordLogin));
                 new MenuPrincipal(login).setVisible(true);
                 this.dispose();
             }
@@ -39,10 +42,11 @@ public class TelaInicial extends javax.swing.JFrame {
         tfLogin = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        tfSenha = new javax.swing.JTextField();
+        pfPassword = new javax.swing.JPasswordField();
         buttonEnviar = new customs.botaoBorda();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -67,8 +71,8 @@ public class TelaInicial extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(27, 27, 27)
-                .addComponent(tfLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 665, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addComponent(tfLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 666, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(59, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -87,10 +91,10 @@ public class TelaInicial extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Senha:");
 
-        tfSenha.setBackground(new java.awt.Color(228, 228, 228));
-        tfSenha.setFont(new java.awt.Font("Segoe UI Semilight", 0, 35)); // NOI18N
-        tfSenha.setForeground(new java.awt.Color(0, 0, 0));
-        tfSenha.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(228, 228, 228), 1, true));
+        pfPassword.setBackground(new java.awt.Color(228, 228, 228));
+        pfPassword.setFont(new java.awt.Font("Segoe UI Semilight", 1, 35)); // NOI18N
+        pfPassword.setForeground(new java.awt.Color(0, 0, 0));
+        pfPassword.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(228, 228, 228)));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -100,17 +104,17 @@ public class TelaInicial extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel3)
                 .addGap(28, 28, 28)
-                .addComponent(tfSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 665, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pfPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 666, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel3)
-                    .addComponent(tfSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(pfPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
 
         buttonEnviar.setForeground(new java.awt.Color(255, 255, 255));
@@ -131,12 +135,6 @@ public class TelaInicial extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(115, 115, 115)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(10, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -146,6 +144,12 @@ public class TelaInicial extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(358, 358, 358))))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(115, 115, 115)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(10, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -157,7 +161,7 @@ public class TelaInicial extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(64, 64, 64)
                 .addComponent(buttonEnviar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(77, Short.MAX_VALUE))
+                .addContainerGap(72, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -188,7 +192,7 @@ public class TelaInicial extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPasswordField pfPassword;
     private javax.swing.JTextField tfLogin;
-    private javax.swing.JTextField tfSenha;
     // End of variables declaration//GEN-END:variables
 }

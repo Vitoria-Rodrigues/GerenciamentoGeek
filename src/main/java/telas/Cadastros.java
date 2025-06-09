@@ -4,16 +4,22 @@ import classes.Cargo;
 import classes.Categoria;
 import classes.Cliente;
 import classes.Funcionario;
+import classes.ItemCarrinho;
 import classes.Login;
 import classes.Produto;
+import classes.Venda;
 import classesDAO.ClienteDAO;
 import classesDAO.FuncionarioDAO;
 import classesDAO.ProdutoDAO;
+import classesDAO.VendaDAO;
 import customs.botaoBorda;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -23,18 +29,45 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import utilitarios.criptografia;
 import validacao.Alerta;
 
 public class Cadastros extends javax.swing.JFrame {
 
-    List<Cargo> listaCargos = FuncionarioDAO.pegarCargos();
-    List<Categoria> listaCategorias = ProdutoDAO.pegarCategoria();
+    private List<Cargo> listaCargos = FuncionarioDAO.pegarCargos();
+    private List<Categoria> listaCategorias = ProdutoDAO.pegarCategoria();
+    private Login login;
 
-    public Cadastros(String menuP) {
+    public Cadastros(String menuP, Login login) {
         initComponents();
+        this.login = login;
+        definirRestricoes(login);
         montarComboboxCargos();
         montarComboboxCategorias();
         viewChange(menuP);
+    }
+
+    public void definirRestricoes(Login login) {
+        if (login.getFuncionario() == null) {
+            Alerta.Sucesso("Bem Vindo!", "Seja Bem Vindo Administrador!");
+        } else if (login.getFuncionario().getCargo().getFuncao().equals("Atendente")) {
+            buttonCadastrarF.setVisible(false);
+            buttonExibirF.setVisible(false);
+            buttonExibirCExcluir.setEnabled(false);
+            buttonExibirVExcluir.setEnabled(false);
+            buttonExibirVExcluir.setVisible(false);
+            buttonExibirVExcluir.setEnabled(false);
+        } else if (login.getFuncionario().getCargo().getFuncao().equals("Caixa")) {
+            buttonCadastrarF.setVisible(false);
+            buttonExibirF.setVisible(false);
+            buttonExibirCExcluir.setEnabled(false);
+            buttonExibirVExcluir.setEnabled(false);
+            buttonExibirVExcluir.setVisible(false);
+            buttonExibirVExcluir.setEnabled(false);
+        } else if(login.getFuncionario().getCargo().getFuncao().equals("Gerente")){
+            buttonExibirVExcluir.setVisible(false);
+            buttonExibirVExcluir.setEnabled(false);
+        }
     }
 
     public void viewChange(String cardName) {  //Método para mudar os cardLayout de acordo com os botões correspondentes da sidebar
@@ -52,6 +85,7 @@ public class Cadastros extends javax.swing.JFrame {
             }
             case "cadastroVenda" -> {
                 buttonCadastrarV.setCor(new Color(27, 91, 155));
+                tfVendaData.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString());
             }
             case "cadastroFunc" -> {
                 buttonCadastrarF.setCor(new Color(27, 91, 155));
@@ -101,6 +135,45 @@ public class Cadastros extends javax.swing.JFrame {
         }
         cbPCategoria.setModel(modelo);
     }
+    private Cliente cliente = new Cliente();
+    private Produto produto = new Produto();
+    private List<ItemCarrinho> carrinho = new ArrayList<>();
+
+    public void listagemProdutos() {
+        produto = VendaDAO.listarProdutos(tfVendaCodigo.getText());
+        tfVendaProduto.setText(produto.getNomeProd());
+        tfVendaPreco.setText(String.valueOf(produto.getPreco()));
+    }
+
+    public void listarCPF() {
+        cliente = VendaDAO.listarCPF(tfVendaCPF.getText());       
+        Alerta.Cliente("Info", cliente.getCpfC(), cliente.getTelefoneC());
+    }
+
+    public void tabelaCarrinho() {
+        DefaultTableModel modelo = (DefaultTableModel) tableVenda.getModel();
+        modelo.setRowCount(0);
+
+        for (ItemCarrinho item : carrinho) {
+            Double subtotal = item.getQtd() * item.getProduto().getPreco();
+            String[] linha = {String.valueOf(item.getProduto().getCodigoProd()), item.getProduto().getNomeProd(),
+                String.valueOf(item.getQtd()), String.valueOf(item.getProduto().getPreco()),
+                "R$" + subtotal.toString()};
+            modelo.addRow(linha);
+        }
+        tableVenda.setModel(modelo);
+    }
+
+    public void adcCarrinho() {
+        ItemCarrinho item = new ItemCarrinho();
+        item.setProduto(produto);
+        item.setQtd(Integer.parseInt(tfVendaQtd.getText()));
+
+        carrinho.add(item);
+        limparCampos(tfVendaProduto, tfVendaCodigo, tfVendaPreco, tfVendaQtd);
+
+        tabelaCarrinho();
+    }
 
     public void cadastroCliente() { //Método para cadastrar o cliente no banco de dados e verificar os campos se estao vazios
         if (tfNomeC.getText().isBlank() && tfCpfC.getText().isBlank()
@@ -113,13 +186,13 @@ public class Cadastros extends javax.swing.JFrame {
         } else if (cbSexoC.getSelectedItem() == null || cbSexoC.getSelectedItem().equals(" ")) {
             Alerta.Erro("Campo vazio", "Por favor, selecionar o sexo");
         } else {
-            Cliente cliente = new Cliente();
-            cliente.setNomeC(tfNomeC.getText());
-            cliente.setCpfC(tfCpfC.getText());
-            cliente.setSexoC(cbSexoC.getSelectedItem().toString());
-            cliente.setTelefoneC(tfTelefoneC.getText());
+            Cliente cli = new Cliente();
+            cli.setNomeC(tfNomeC.getText());
+            cli.setCpfC(tfCpfC.getText());
+            cli.setSexoC(cbSexoC.getSelectedItem().toString());
+            cli.setTelefoneC(tfTelefoneC.getText());
 
-            ClienteDAO.cadastrarCliente(cliente);
+            ClienteDAO.cadastrarCliente(cli);
 
             limparCampos(tfNomeC, tfCpfC, tfTelefoneC);
             cbSexoC.setSelectedIndex(-1);
@@ -127,11 +200,13 @@ public class Cadastros extends javax.swing.JFrame {
     }
 
     public void cadastroFuncionario() { //Método para cadastrar o funcionário no banco de dados
+        String passwordFunc = tfFSenha.getText();
+
         if (tfFNome.getText().isBlank() && tfFCpf.getText().isBlank()
                 && tfFCep.getText().isBlank() && tfFLogradouro.getText().isBlank()
-                && tfFNum.getText().isBlank() && tfFComplemento.getText().isBlank() 
+                && tfFNum.getText().isBlank() && tfFComplemento.getText().isBlank()
                 && tfFLogin.getText().isBlank()
-                && tfFSenha.getText().isBlank()) {
+                && passwordFunc.isBlank()) {
             Alerta.Erro("Campo vazio", "Por favor, inserir os dados");
         } else if (tfFNome.getText().isBlank()) {
             Alerta.Erro("Campo vazio", "Por favor, inserir o nome");
@@ -140,20 +215,20 @@ public class Cadastros extends javax.swing.JFrame {
         } else if (tfFCep.getText().isBlank()) {
             Alerta.Erro("Campo vazio", "Por favor, inserir o CEP");
         } else if (tfFLogradouro.getText().isBlank()) {
-            Alerta.Erro("Campo vazio", "Por favor, inserir o logradouro" );
+            Alerta.Erro("Campo vazio", "Por favor, inserir o logradouro");
         } else if (tfFNum.getText().isBlank()) {
             Alerta.Erro("Campo vazio", "Por favor, inserir o numero");
         } else if (tfFComplemento.getText().isBlank()) {
             Alerta.Erro("Campo vazio", "Por favor, inserir o complemento");
         } else if (tfFLogin.getText().isBlank()) {
             Alerta.Erro("Campo vazio", "Por favor, inserir o login");
-        } else if (tfFSenha.getText().isBlank()) {
+        } else if (passwordFunc.isBlank()) {
             Alerta.Erro("Campo vazio", "Por favor, inserir a senha");
         } else {
 
             Login log = new Login();
             log.setLogin(tfFLogin.getText());
-            log.setSenha(tfFSenha.getText());
+            log.setSenha(criptografia.toMD5(passwordFunc));
 
             Cargo cargoselecionado = (Cargo) listaCargos.stream()
                     .filter(cargo -> cargo.getFuncao().equals(cbFCargos.getSelectedItem().toString()))
@@ -222,15 +297,39 @@ public class Cadastros extends javax.swing.JFrame {
 
         }
     }
+    
+    public void cadastroVenda() { //Método para cadastrar o produto no banco de dados       
+        Venda venda = new Venda();
+        venda.setCliente(cliente);
+        venda.setFuncionario(login.getFuncionario());
+        List<Produto> produtos = new ArrayList<>();
+        Double valorTotal = 0.0;
+        int qtdprod = 0;
+        
+        for(ItemCarrinho item : carrinho){
+            produtos.add(item.getProduto());
+            valorTotal = valorTotal + (item.getProduto().getPreco() * item.getQtd());
+            qtdprod = qtdprod + item.getQtd();
+            int qtdEstoque = item.getProduto().getQtdEstoque();
+            int qtdEstoqueAtz = qtdEstoque - item.getQtd();
+            item.getProduto().setQtdEstoque(qtdEstoqueAtz);
+        }
+        venda.setProd(produtos);
+        venda.setDataVenda(LocalDate.now());
+        venda.setTotalVenda(valorTotal);
+        venda.setQtdVenda(qtdprod);
+        
+        new Pagamento(this, rootPaneCheckingEnabled, venda).setVisible(true);
+    }
 
     public void listaClientes() { //Método para listar os clientes que foram cadastrados no banco de dados
         DefaultTableModel modelo = (DefaultTableModel) tableClientes.getModel();
         modelo.setRowCount(0);
         List<Cliente> lista = ClienteDAO.listarClientes(tfBuscarClientes.getText());
 
-        for (Cliente cliente : lista) {
-            String[] linha = {cliente.getId().toString(), cliente.getNomeC(),
-                cliente.getCpfC(), cliente.getSexoC(), cliente.getTelefoneC()};
+        for (Cliente cli : lista) {
+            String[] linha = {cli.getId().toString(), cli.getNomeC(),
+                cli.getCpfC(), cli.getSexoC(), cli.getTelefoneC()};
             modelo.addRow(linha);
         }
         tableClientes.setModel(modelo);
@@ -250,20 +349,35 @@ public class Cadastros extends javax.swing.JFrame {
         }
         tableFuncionarios.setModel(modelo);
     }
-    
-    public void listaProdutos(){  //Método para listar os produtos que foram cadastrados no banco de dados
+
+    public void listaProdutos() {  //Método para listar os produtos que foram cadastrados no banco de dados
         DefaultTableModel modelo = (DefaultTableModel) tableProdutos.getModel();
         modelo.setRowCount(0);
         List<Produto> lista = ProdutoDAO.listarProdutos(tfBuscarProdutos.getText());
-        
-        for(Produto produto : lista){
-            String[] linha = {produto.getId().toString(), String.valueOf(produto.getCodigoProd()), produto.getNomeProd(),
-            produto.getCategoria().getNomeCateg(), String.valueOf(produto.getQtdEstoque()), 
-            String.valueOf(produto.getPreco()), produto.getDescProd()};
+
+        for (Produto prod : lista) {
+            String[] linha = {prod.getId().toString(), String.valueOf(prod.getCodigoProd()), produto.getNomeProd(),
+                prod.getCategoria().getNomeCateg(), String.valueOf(prod.getQtdEstoque()),
+                String.valueOf(prod.getPreco()), prod.getDescProd()};
             modelo.addRow(linha);
         }
         tableProdutos.setModel(modelo);
     }
+    
+    public void listaVendas() {  //Método para listar as vendas que foram cadastrados no banco de dados
+        DefaultTableModel modelo = (DefaultTableModel) tableVendas.getModel();
+        modelo.setRowCount(0);
+        List<Venda> lista = VendaDAO.listarVendas(tfBuscarVendas.getText());
+
+        for (Venda venda : lista) {
+            String[] linha = {venda.getId().toString(), venda.getCliente().getNomeC(), 
+                String.valueOf(venda.getDataVenda()), String.valueOf(venda.getQtdVenda()),
+            String.valueOf(venda.getTotalVenda())};
+            modelo.addRow(linha);
+        }
+        tableVendas.setModel(modelo);
+    }
+    
 
     public void editarClientes() {  //Método para editar os clientes que foram cadastrados no banco de dados
         int linhaSelecionada = tableClientes.getSelectedRow();
@@ -322,7 +436,7 @@ public class Cadastros extends javax.swing.JFrame {
         }
         listaClientes();
     }
-    
+
     public void excluirFuncionarios() { ////Método para excluir os funcionarios que foram cadastrados no banco de dados
         int linhaSelecionada = tableFuncionarios.getSelectedRow();
 
@@ -335,7 +449,7 @@ public class Cadastros extends javax.swing.JFrame {
         }
         listaFuncionarios();
     }
-    
+
     public void excluirProdutos() { ////Método para excluir os produtos que foram cadastrados no banco de dados
         int linhaSelecionada = tableProdutos.getSelectedRow();
 
@@ -347,6 +461,19 @@ public class Cadastros extends javax.swing.JFrame {
             ProdutoDAO.excluirProdutos(idProduto);
         }
         listaProdutos();
+    }
+    
+    public void excluirVendas() { ////Método para excluir as vendas que foram cadastrados no banco de dados
+        int linhaSelecionada = tableVendas.getSelectedRow();
+
+        if (linhaSelecionada == -1) {
+            Alerta.Erro("Erro na linha", "Nenhuma linha selecionada");
+        } else {
+            String idVenda = (String) tableVendas.getValueAt(linhaSelecionada, 0);
+
+            VendaDAO.excluirVendas(idVenda);
+        }
+        listaVendas();
     }
 
     @SuppressWarnings("unchecked")
@@ -444,11 +571,11 @@ public class Cadastros extends javax.swing.JFrame {
         jPanel9 = new javax.swing.JPanel();
         jLabel18 = new javax.swing.JLabel();
         tfBuscarClientes = new javax.swing.JTextField();
-        buttonVPesquisarAdc1 = new customs.botaoBorda();
+        buttonVPesquisarAdc = new customs.botaoBorda();
         jScrollPane3 = new javax.swing.JScrollPane();
         tableClientes = new javax.swing.JTable();
         buttonExibirCEditar = new customs.botaoBorda();
-        buttonExibirCPesquisar = new customs.botaoBorda();
+        buttonExibirCExcluir = new customs.botaoBorda();
         buttonExibirCCad = new customs.botaoBorda();
         panelExibirProdutos = new javax.swing.JPanel();
         jPanel10 = new javax.swing.JPanel();
@@ -458,7 +585,7 @@ public class Cadastros extends javax.swing.JFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         tableProdutos = new javax.swing.JTable();
         buttonExibirPEditar = new customs.botaoBorda();
-        buttonExibirPPesquisar = new customs.botaoBorda();
+        buttonExibirPExcluir = new customs.botaoBorda();
         buttonExibirPCad = new customs.botaoBorda();
         panelExibirVendas = new javax.swing.JPanel();
         jPanel11 = new javax.swing.JPanel();
@@ -467,9 +594,8 @@ public class Cadastros extends javax.swing.JFrame {
         buttonVPesquisar = new customs.botaoBorda();
         jScrollPane5 = new javax.swing.JScrollPane();
         tableVendas = new javax.swing.JTable();
-        buttonExibirVEditar = new customs.botaoBorda();
         buttonExibirVCad = new customs.botaoBorda();
-        buttonExibirVEditar1 = new customs.botaoBorda();
+        buttonExibirVExcluir = new customs.botaoBorda();
         panelExibirFuncionario = new javax.swing.JPanel();
         jPanel12 = new javax.swing.JPanel();
         jLabel29 = new javax.swing.JLabel();
@@ -1283,6 +1409,11 @@ public class Cadastros extends javax.swing.JFrame {
         buttonVAdicionar.setFocusable(false);
         buttonVAdicionar.setFont(new java.awt.Font("Segoe UI Semibold", 1, 25)); // NOI18N
         buttonVAdicionar.setRadius(32);
+        buttonVAdicionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonVAdicionarActionPerformed(evt);
+            }
+        });
 
         buttonVPesquisarCod.setForeground(new java.awt.Color(255, 255, 255));
         buttonVPesquisarCod.setText("Pesquisar");
@@ -1292,10 +1423,20 @@ public class Cadastros extends javax.swing.JFrame {
         buttonVPesquisarCod.setFocusable(false);
         buttonVPesquisarCod.setFont(new java.awt.Font("Segoe UI Semibold", 1, 25)); // NOI18N
         buttonVPesquisarCod.setRadius(32);
+        buttonVPesquisarCod.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonVPesquisarCodActionPerformed(evt);
+            }
+        });
 
         tfVendaData.setBackground(new java.awt.Color(255, 255, 255));
         tfVendaData.setFont(new java.awt.Font("Segoe UI Semibold", 1, 30)); // NOI18N
         tfVendaData.setForeground(new java.awt.Color(0, 0, 0));
+        tfVendaData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfVendaDataActionPerformed(evt);
+            }
+        });
 
         tfVendaCPF.setBackground(new java.awt.Color(255, 255, 255));
         tfVendaCPF.setFont(new java.awt.Font("Segoe UI Semibold", 1, 30)); // NOI18N
@@ -1310,20 +1451,20 @@ public class Cadastros extends javax.swing.JFrame {
         tableVenda.setForeground(new java.awt.Color(0, 0, 0));
         tableVenda.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Código", "Produto", "Data", "Qtd", "Preço", "SubTotal"
+                "Código", "Produto", "Qtd", "Preço", "SubTotal"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -1342,18 +1483,15 @@ public class Cadastros extends javax.swing.JFrame {
             tableVenda.getColumnModel().getColumn(0).setMinWidth(90);
             tableVenda.getColumnModel().getColumn(0).setPreferredWidth(100);
             tableVenda.getColumnModel().getColumn(0).setMaxWidth(110);
-            tableVenda.getColumnModel().getColumn(2).setMinWidth(140);
-            tableVenda.getColumnModel().getColumn(2).setPreferredWidth(150);
-            tableVenda.getColumnModel().getColumn(2).setMaxWidth(160);
-            tableVenda.getColumnModel().getColumn(3).setMinWidth(40);
-            tableVenda.getColumnModel().getColumn(3).setPreferredWidth(50);
-            tableVenda.getColumnModel().getColumn(3).setMaxWidth(60);
-            tableVenda.getColumnModel().getColumn(4).setMinWidth(140);
-            tableVenda.getColumnModel().getColumn(4).setPreferredWidth(150);
-            tableVenda.getColumnModel().getColumn(4).setMaxWidth(160);
-            tableVenda.getColumnModel().getColumn(5).setMinWidth(190);
-            tableVenda.getColumnModel().getColumn(5).setPreferredWidth(200);
-            tableVenda.getColumnModel().getColumn(5).setMaxWidth(210);
+            tableVenda.getColumnModel().getColumn(2).setMinWidth(40);
+            tableVenda.getColumnModel().getColumn(2).setPreferredWidth(50);
+            tableVenda.getColumnModel().getColumn(2).setMaxWidth(60);
+            tableVenda.getColumnModel().getColumn(3).setMinWidth(140);
+            tableVenda.getColumnModel().getColumn(3).setPreferredWidth(150);
+            tableVenda.getColumnModel().getColumn(3).setMaxWidth(160);
+            tableVenda.getColumnModel().getColumn(4).setMinWidth(190);
+            tableVenda.getColumnModel().getColumn(4).setPreferredWidth(200);
+            tableVenda.getColumnModel().getColumn(4).setMaxWidth(210);
         }
         DefaultTableCellRenderer centralizarTable = new DefaultTableCellRenderer();
         centralizarTable.setHorizontalAlignment(SwingConstants.CENTER);
@@ -1384,6 +1522,11 @@ public class Cadastros extends javax.swing.JFrame {
         buttonVPagar.setFocusable(false);
         buttonVPagar.setFont(new java.awt.Font("Segoe UI Semibold", 1, 25)); // NOI18N
         buttonVPagar.setRadius(32);
+        buttonVPagar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonVPagarActionPerformed(evt);
+            }
+        });
 
         buttonVLimpar.setForeground(new java.awt.Color(255, 255, 255));
         buttonVLimpar.setText("Limpar");
@@ -1494,17 +1637,17 @@ public class Cadastros extends javax.swing.JFrame {
         tfBuscarClientes.setFont(new java.awt.Font("Segoe UI Semibold", 1, 30)); // NOI18N
         tfBuscarClientes.setForeground(new java.awt.Color(0, 0, 0));
 
-        buttonVPesquisarAdc1.setForeground(new java.awt.Color(255, 255, 255));
-        buttonVPesquisarAdc1.setText("Pesquisar");
-        buttonVPesquisarAdc1.setBorderPainted(false);
-        buttonVPesquisarAdc1.setCor(new java.awt.Color(0, 51, 102));
-        buttonVPesquisarAdc1.setFocusPainted(false);
-        buttonVPesquisarAdc1.setFocusable(false);
-        buttonVPesquisarAdc1.setFont(new java.awt.Font("Segoe UI Semibold", 1, 25)); // NOI18N
-        buttonVPesquisarAdc1.setRadius(32);
-        buttonVPesquisarAdc1.addActionListener(new java.awt.event.ActionListener() {
+        buttonVPesquisarAdc.setForeground(new java.awt.Color(255, 255, 255));
+        buttonVPesquisarAdc.setText("Pesquisar");
+        buttonVPesquisarAdc.setBorderPainted(false);
+        buttonVPesquisarAdc.setCor(new java.awt.Color(0, 51, 102));
+        buttonVPesquisarAdc.setFocusPainted(false);
+        buttonVPesquisarAdc.setFocusable(false);
+        buttonVPesquisarAdc.setFont(new java.awt.Font("Segoe UI Semibold", 1, 25)); // NOI18N
+        buttonVPesquisarAdc.setRadius(32);
+        buttonVPesquisarAdc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonVPesquisarAdc1ActionPerformed(evt);
+                buttonVPesquisarAdcActionPerformed(evt);
             }
         });
 
@@ -1593,17 +1736,17 @@ public class Cadastros extends javax.swing.JFrame {
             }
         });
 
-        buttonExibirCPesquisar.setForeground(new java.awt.Color(255, 255, 255));
-        buttonExibirCPesquisar.setText("Excluir");
-        buttonExibirCPesquisar.setBorderPainted(false);
-        buttonExibirCPesquisar.setCor(new java.awt.Color(0, 51, 102));
-        buttonExibirCPesquisar.setFocusPainted(false);
-        buttonExibirCPesquisar.setFocusable(false);
-        buttonExibirCPesquisar.setFont(new java.awt.Font("Segoe UI Semibold", 1, 25)); // NOI18N
-        buttonExibirCPesquisar.setRadius(32);
-        buttonExibirCPesquisar.addActionListener(new java.awt.event.ActionListener() {
+        buttonExibirCExcluir.setForeground(new java.awt.Color(255, 255, 255));
+        buttonExibirCExcluir.setText("Excluir");
+        buttonExibirCExcluir.setBorderPainted(false);
+        buttonExibirCExcluir.setCor(new java.awt.Color(0, 51, 102));
+        buttonExibirCExcluir.setFocusPainted(false);
+        buttonExibirCExcluir.setFocusable(false);
+        buttonExibirCExcluir.setFont(new java.awt.Font("Segoe UI Semibold", 1, 25)); // NOI18N
+        buttonExibirCExcluir.setRadius(32);
+        buttonExibirCExcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonExibirCPesquisarActionPerformed(evt);
+                buttonExibirCExcluirActionPerformed(evt);
             }
         });
 
@@ -1633,14 +1776,14 @@ public class Cadastros extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(buttonExibirCEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(364, 364, 364)
-                        .addComponent(buttonExibirCPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(buttonExibirCExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
                         .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
                         .addComponent(tfBuscarClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 840, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(32, 32, 32)
-                        .addComponent(buttonVPesquisarAdc1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(buttonVPesquisarAdc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(19, 19, 19))
         );
         jPanel9Layout.setVerticalGroup(
@@ -1650,14 +1793,14 @@ public class Cadastros extends javax.swing.JFrame {
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel18)
                     .addComponent(tfBuscarClientes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buttonVPesquisarAdc1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(buttonVPesquisarAdc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buttonExibirCCad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(buttonExibirCEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buttonExibirCPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(buttonExibirCExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(33, 33, 33))
         );
 
@@ -1789,17 +1932,17 @@ public class Cadastros extends javax.swing.JFrame {
             }
         });
 
-        buttonExibirPPesquisar.setForeground(new java.awt.Color(255, 255, 255));
-        buttonExibirPPesquisar.setText("Excluir");
-        buttonExibirPPesquisar.setBorderPainted(false);
-        buttonExibirPPesquisar.setCor(new java.awt.Color(0, 51, 102));
-        buttonExibirPPesquisar.setFocusPainted(false);
-        buttonExibirPPesquisar.setFocusable(false);
-        buttonExibirPPesquisar.setFont(new java.awt.Font("Segoe UI Semibold", 1, 25)); // NOI18N
-        buttonExibirPPesquisar.setRadius(32);
-        buttonExibirPPesquisar.addActionListener(new java.awt.event.ActionListener() {
+        buttonExibirPExcluir.setForeground(new java.awt.Color(255, 255, 255));
+        buttonExibirPExcluir.setText("Excluir");
+        buttonExibirPExcluir.setBorderPainted(false);
+        buttonExibirPExcluir.setCor(new java.awt.Color(0, 51, 102));
+        buttonExibirPExcluir.setFocusPainted(false);
+        buttonExibirPExcluir.setFocusable(false);
+        buttonExibirPExcluir.setFont(new java.awt.Font("Segoe UI Semibold", 1, 25)); // NOI18N
+        buttonExibirPExcluir.setRadius(32);
+        buttonExibirPExcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonExibirPPesquisarActionPerformed(evt);
+                buttonExibirPExcluirActionPerformed(evt);
             }
         });
 
@@ -1829,7 +1972,7 @@ public class Cadastros extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(buttonExibirPEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(359, 359, 359)
-                        .addComponent(buttonExibirPPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(buttonExibirPExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane4)
                     .addGroup(jPanel10Layout.createSequentialGroup()
                         .addComponent(jLabel19)
@@ -1853,7 +1996,7 @@ public class Cadastros extends javax.swing.JFrame {
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buttonExibirPCad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(buttonExibirPEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buttonExibirPPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(buttonExibirPExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(34, 34, 34))
         );
 
@@ -1888,6 +2031,11 @@ public class Cadastros extends javax.swing.JFrame {
         buttonVPesquisar.setFocusable(false);
         buttonVPesquisar.setFont(new java.awt.Font("Segoe UI Semibold", 1, 25)); // NOI18N
         buttonVPesquisar.setRadius(32);
+        buttonVPesquisar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonVPesquisarActionPerformed(evt);
+            }
+        });
 
         tableVendas.setBackground(new java.awt.Color(255, 255, 255));
         tableVendas.setFont(new java.awt.Font("Segoe UI Semibold", 1, 18)); // NOI18N
@@ -1960,15 +2108,6 @@ public class Cadastros extends javax.swing.JFrame {
         tableVendas.setShowVerticalLines(false);
         tableVendas.getTableHeader().setFont( new Font("Segoe UI Semibold",Font.BOLD, 18));
 
-        buttonExibirVEditar.setForeground(new java.awt.Color(255, 255, 255));
-        buttonExibirVEditar.setText("Editar");
-        buttonExibirVEditar.setBorderPainted(false);
-        buttonExibirVEditar.setCor(new java.awt.Color(0, 51, 102));
-        buttonExibirVEditar.setFocusPainted(false);
-        buttonExibirVEditar.setFocusable(false);
-        buttonExibirVEditar.setFont(new java.awt.Font("Segoe UI Semibold", 1, 25)); // NOI18N
-        buttonExibirVEditar.setRadius(32);
-
         buttonExibirVCad.setForeground(new java.awt.Color(255, 255, 255));
         buttonExibirVCad.setText("Cadastrar");
         buttonExibirVCad.setBorderPainted(false);
@@ -1978,14 +2117,19 @@ public class Cadastros extends javax.swing.JFrame {
         buttonExibirVCad.setFont(new java.awt.Font("Segoe UI Semibold", 1, 25)); // NOI18N
         buttonExibirVCad.setRadius(32);
 
-        buttonExibirVEditar1.setForeground(new java.awt.Color(255, 255, 255));
-        buttonExibirVEditar1.setText("Excluir");
-        buttonExibirVEditar1.setBorderPainted(false);
-        buttonExibirVEditar1.setCor(new java.awt.Color(0, 51, 102));
-        buttonExibirVEditar1.setFocusPainted(false);
-        buttonExibirVEditar1.setFocusable(false);
-        buttonExibirVEditar1.setFont(new java.awt.Font("Segoe UI Semibold", 1, 25)); // NOI18N
-        buttonExibirVEditar1.setRadius(32);
+        buttonExibirVExcluir.setForeground(new java.awt.Color(255, 255, 255));
+        buttonExibirVExcluir.setText("Excluir");
+        buttonExibirVExcluir.setBorderPainted(false);
+        buttonExibirVExcluir.setCor(new java.awt.Color(0, 51, 102));
+        buttonExibirVExcluir.setFocusPainted(false);
+        buttonExibirVExcluir.setFocusable(false);
+        buttonExibirVExcluir.setFont(new java.awt.Font("Segoe UI Semibold", 1, 25)); // NOI18N
+        buttonExibirVExcluir.setRadius(32);
+        buttonExibirVExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonExibirVExcluirActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
@@ -1996,16 +2140,14 @@ public class Cadastros extends javax.swing.JFrame {
                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel11Layout.createSequentialGroup()
                         .addComponent(buttonExibirVCad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 372, Short.MAX_VALUE)
-                        .addComponent(buttonExibirVEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(368, 368, 368)
-                        .addComponent(buttonExibirVEditar1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(buttonExibirVExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane5)
                     .addGroup(jPanel11Layout.createSequentialGroup()
                         .addComponent(jLabel20)
                         .addGap(26, 26, 26)
                         .addComponent(tfBuscarVendas, javax.swing.GroupLayout.PREFERRED_SIZE, 835, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                         .addComponent(buttonVPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(19, 19, 19))
         );
@@ -2022,8 +2164,7 @@ public class Cadastros extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buttonExibirVCad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buttonExibirVEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buttonExibirVEditar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(buttonExibirVExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(34, 34, 34))
         );
 
@@ -2283,6 +2424,7 @@ public class Cadastros extends javax.swing.JFrame {
 
     private void buttonExibirVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExibirVActionPerformed
         viewChange("exibirVendas");
+        listaVendas();
     }//GEN-LAST:event_buttonExibirVActionPerformed
 
     private void buttonExibirPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExibirPActionPerformed
@@ -2314,7 +2456,11 @@ public class Cadastros extends javax.swing.JFrame {
     }//GEN-LAST:event_tfCadastroPCodActionPerformed
 
     private void buttonVPesquisarCPFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonVPesquisarCPFActionPerformed
-        // TODO add your handling code here:
+        if (tfVendaCPF.getText().isBlank()) {
+            Alerta.Erro("Campo Vazio", "Digite o CPF do cliente");
+        } else {
+            listarCPF();
+        }
     }//GEN-LAST:event_buttonVPesquisarCPFActionPerformed
 
     private void cbSexoCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSexoCActionPerformed
@@ -2344,13 +2490,13 @@ public class Cadastros extends javax.swing.JFrame {
         viewChange("cadastroFunc");
     }//GEN-LAST:event_buttonCadastrarFActionPerformed
 
-    private void buttonVPesquisarAdc1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonVPesquisarAdc1ActionPerformed
+    private void buttonVPesquisarAdcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonVPesquisarAdcActionPerformed
         listaClientes();
-    }//GEN-LAST:event_buttonVPesquisarAdc1ActionPerformed
+    }//GEN-LAST:event_buttonVPesquisarAdcActionPerformed
 
-    private void buttonExibirCPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExibirCPesquisarActionPerformed
+    private void buttonExibirCExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExibirCExcluirActionPerformed
         excluirClientes();
-    }//GEN-LAST:event_buttonExibirCPesquisarActionPerformed
+    }//GEN-LAST:event_buttonExibirCExcluirActionPerformed
 
     private void buttonExibirCCadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExibirCCadActionPerformed
         viewChange("cadastroCli");
@@ -2373,7 +2519,7 @@ public class Cadastros extends javax.swing.JFrame {
     }//GEN-LAST:event_buttonExibirFExcluirActionPerformed
 
     private void buttonExibirPCadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExibirPCadActionPerformed
-       viewChange("cadastroProd");
+        viewChange("cadastroProd");
     }//GEN-LAST:event_buttonExibirPCadActionPerformed
 
     private void buttonExibirPEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExibirPEditarActionPerformed
@@ -2384,9 +2530,37 @@ public class Cadastros extends javax.swing.JFrame {
         listaProdutos();
     }//GEN-LAST:event_buttonPPesquisarActionPerformed
 
-    private void buttonExibirPPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExibirPPesquisarActionPerformed
+    private void buttonExibirPExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExibirPExcluirActionPerformed
         excluirProdutos();
-    }//GEN-LAST:event_buttonExibirPPesquisarActionPerformed
+    }//GEN-LAST:event_buttonExibirPExcluirActionPerformed
+
+    private void buttonExibirVExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExibirVExcluirActionPerformed
+        excluirVendas();
+    }//GEN-LAST:event_buttonExibirVExcluirActionPerformed
+
+    private void buttonVPesquisarCodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonVPesquisarCodActionPerformed
+        if (tfVendaCodigo.getText().isBlank()) {
+            Alerta.Erro("Campo Vazio", "Digite o ´Código do produto");
+        } else {
+            listagemProdutos();
+        }
+    }//GEN-LAST:event_buttonVPesquisarCodActionPerformed
+
+    private void tfVendaDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfVendaDataActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfVendaDataActionPerformed
+
+    private void buttonVAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonVAdicionarActionPerformed
+        adcCarrinho();
+    }//GEN-LAST:event_buttonVAdicionarActionPerformed
+
+    private void buttonVPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonVPagarActionPerformed
+        cadastroVenda();
+    }//GEN-LAST:event_buttonVPagarActionPerformed
+
+    private void buttonVPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonVPesquisarActionPerformed
+        listaVendas();
+    }//GEN-LAST:event_buttonVPesquisarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -2400,7 +2574,7 @@ public class Cadastros extends javax.swing.JFrame {
     private customs.botaoBorda buttonExibirC;
     private customs.botaoBorda buttonExibirCCad;
     private customs.botaoBorda buttonExibirCEditar;
-    private customs.botaoBorda buttonExibirCPesquisar;
+    private customs.botaoBorda buttonExibirCExcluir;
     private customs.botaoBorda buttonExibirF;
     private customs.botaoBorda buttonExibirFCad;
     private customs.botaoBorda buttonExibirFEditar;
@@ -2408,11 +2582,10 @@ public class Cadastros extends javax.swing.JFrame {
     private customs.botaoBorda buttonExibirP;
     private customs.botaoBorda buttonExibirPCad;
     private customs.botaoBorda buttonExibirPEditar;
-    private customs.botaoBorda buttonExibirPPesquisar;
+    private customs.botaoBorda buttonExibirPExcluir;
     private customs.botaoBorda buttonExibirV;
     private customs.botaoBorda buttonExibirVCad;
-    private customs.botaoBorda buttonExibirVEditar;
-    private customs.botaoBorda buttonExibirVEditar1;
+    private customs.botaoBorda buttonExibirVExcluir;
     private customs.botaoBorda buttonFPesquisar;
     private customs.botaoBorda buttonLimparC;
     private customs.botaoBorda buttonLimparF;
@@ -2423,7 +2596,7 @@ public class Cadastros extends javax.swing.JFrame {
     private customs.botaoBorda buttonVLimpar;
     private customs.botaoBorda buttonVPagar;
     private customs.botaoBorda buttonVPesquisar;
-    private customs.botaoBorda buttonVPesquisarAdc1;
+    private customs.botaoBorda buttonVPesquisarAdc;
     private customs.botaoBorda buttonVPesquisarCPF;
     private customs.botaoBorda buttonVPesquisarCod;
     private javax.swing.JComboBox<String> cbFCargos;
