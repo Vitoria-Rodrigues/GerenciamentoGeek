@@ -86,7 +86,7 @@ public class EditarCadastroCliente extends javax.swing.JDialog {
         cbSexoEC.setBackground(new java.awt.Color(255, 255, 255));
         cbSexoEC.setFont(new java.awt.Font("Segoe UI Semibold", 1, 25)); // NOI18N
         cbSexoEC.setForeground(new java.awt.Color(0, 0, 0));
-        cbSexoEC.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Femino", "Masculino", "Outro" }));
+        cbSexoEC.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Feminino", "Masculino", "Outro" }));
 
         tfCpfEC.setBackground(new java.awt.Color(255, 255, 255));
         tfCpfEC.setFont(new java.awt.Font("Segoe UI Semibold", 1, 30)); // NOI18N

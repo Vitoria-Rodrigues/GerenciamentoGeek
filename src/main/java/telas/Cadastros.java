@@ -146,8 +146,14 @@ public class Cadastros extends javax.swing.JFrame {
     }
 
     public void listarCPF() {
-        cliente = VendaDAO.listarCPF(tfVendaCPF.getText());       
+        cliente = VendaDAO.listarCPF(tfVendaCPFC.getText());       
         Alerta.Cliente("Info", cliente.getCpfC(), cliente.getTelefoneC());
+    }
+    
+    public void limparTabela(){
+        DefaultTableModel modelo = (DefaultTableModel) tableVenda.getModel();
+        modelo.setRowCount(0);
+        tableVenda.setModel(modelo);
     }
 
     public void tabelaCarrinho() {
@@ -524,11 +530,11 @@ public class Cadastros extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         buttonCadastrarCliente = new customs.botaoBorda();
         jLabel5 = new javax.swing.JLabel();
-        cbSexoC = new javax.swing.JComboBox<>();
         tfNomeC = new javax.swing.JTextField();
         tfCpfC = new javax.swing.JTextField();
         tfTelefoneC = new javax.swing.JTextField();
         buttonLimparC = new customs.botaoBorda();
+        cbSexoC = new javax.swing.JComboBox<>();
         panelProduto = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         buttonCadastrarProduto = new customs.botaoBorda();
@@ -561,7 +567,7 @@ public class Cadastros extends javax.swing.JFrame {
         buttonVAdicionar = new customs.botaoBorda();
         buttonVPesquisarCod = new customs.botaoBorda();
         tfVendaData = new javax.swing.JTextField();
-        tfVendaCPF = new javax.swing.JTextField();
+        tfVendaCPFC = new javax.swing.JTextField();
         tfVendaProduto = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         tableVenda = new javax.swing.JTable();
@@ -1069,16 +1075,6 @@ public class Cadastros extends javax.swing.JFrame {
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Sexo:");
 
-        cbSexoC.setBackground(new java.awt.Color(255, 255, 255));
-        cbSexoC.setFont(new java.awt.Font("Segoe UI Semibold", 1, 30)); // NOI18N
-        cbSexoC.setForeground(new java.awt.Color(0, 0, 0));
-        cbSexoC.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Femino", "Masculino", "Outros" }));
-        cbSexoC.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbSexoCActionPerformed(evt);
-            }
-        });
-
         tfNomeC.setBackground(new java.awt.Color(255, 255, 255));
         tfNomeC.setFont(new java.awt.Font("Segoe UI Semibold", 1, 30)); // NOI18N
         tfNomeC.setForeground(new java.awt.Color(0, 0, 0));
@@ -1104,6 +1100,11 @@ public class Cadastros extends javax.swing.JFrame {
                 buttonLimparCActionPerformed(evt);
             }
         });
+
+        cbSexoC.setBackground(new java.awt.Color(255, 255, 255));
+        cbSexoC.setFont(new java.awt.Font("Segoe UI Semibold", 1, 30)); // NOI18N
+        cbSexoC.setForeground(new java.awt.Color(0, 0, 0));
+        cbSexoC.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Feminino", "Masculino", "Outros" }));
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -1144,17 +1145,21 @@ public class Cadastros extends javax.swing.JFrame {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(tfNomeC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(82, 82, 82)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5)
-                    .addComponent(cbSexoC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tfCpfC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(82, 82, 82)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGap(82, 82, 82)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5)
+                            .addComponent(tfCpfC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGap(81, 81, 81)
+                        .addComponent(cbSexoC, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(90, 90, 90)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tfTelefoneC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 186, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 178, Short.MAX_VALUE)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buttonLimparC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(buttonCadastrarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1438,9 +1443,9 @@ public class Cadastros extends javax.swing.JFrame {
             }
         });
 
-        tfVendaCPF.setBackground(new java.awt.Color(255, 255, 255));
-        tfVendaCPF.setFont(new java.awt.Font("Segoe UI Semibold", 1, 30)); // NOI18N
-        tfVendaCPF.setForeground(new java.awt.Color(0, 0, 0));
+        tfVendaCPFC.setBackground(new java.awt.Color(255, 255, 255));
+        tfVendaCPFC.setFont(new java.awt.Font("Segoe UI Semibold", 1, 30)); // NOI18N
+        tfVendaCPFC.setForeground(new java.awt.Color(0, 0, 0));
 
         tfVendaProduto.setBackground(new java.awt.Color(255, 255, 255));
         tfVendaProduto.setFont(new java.awt.Font("Segoe UI Semibold", 1, 30)); // NOI18N
@@ -1536,6 +1541,11 @@ public class Cadastros extends javax.swing.JFrame {
         buttonVLimpar.setFocusable(false);
         buttonVLimpar.setFont(new java.awt.Font("Segoe UI Semibold", 1, 25)); // NOI18N
         buttonVLimpar.setRadius(32);
+        buttonVLimpar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonVLimparActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -1563,7 +1573,7 @@ public class Cadastros extends javax.swing.JFrame {
                                 .addComponent(jLabel15)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(tfVendaData, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(tfVendaCPF)
+                            .addComponent(tfVendaCPFC)
                             .addComponent(tfVendaCodigo, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel8Layout.createSequentialGroup()
                                 .addComponent(tfVendaPreco, javax.swing.GroupLayout.PREFERRED_SIZE, 485, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1585,7 +1595,7 @@ public class Cadastros extends javax.swing.JFrame {
                 .addGap(30, 30, 30)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
-                    .addComponent(tfVendaCPF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfVendaCPFC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(buttonVPesquisarCPF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(45, 45, 45)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -2116,6 +2126,11 @@ public class Cadastros extends javax.swing.JFrame {
         buttonExibirVCad.setFocusable(false);
         buttonExibirVCad.setFont(new java.awt.Font("Segoe UI Semibold", 1, 25)); // NOI18N
         buttonExibirVCad.setRadius(32);
+        buttonExibirVCad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonExibirVCadActionPerformed(evt);
+            }
+        });
 
         buttonExibirVExcluir.setForeground(new java.awt.Color(255, 255, 255));
         buttonExibirVExcluir.setText("Excluir");
@@ -2456,16 +2471,12 @@ public class Cadastros extends javax.swing.JFrame {
     }//GEN-LAST:event_tfCadastroPCodActionPerformed
 
     private void buttonVPesquisarCPFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonVPesquisarCPFActionPerformed
-        if (tfVendaCPF.getText().isBlank()) {
+        if (tfVendaCPFC.getText().isBlank()) {
             Alerta.Erro("Campo Vazio", "Digite o CPF do cliente");
         } else {
             listarCPF();
         }
     }//GEN-LAST:event_buttonVPesquisarCPFActionPerformed
-
-    private void cbSexoCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSexoCActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbSexoCActionPerformed
 
     private void buttonExibirFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExibirFActionPerformed
         viewChange("exibirFunc");
@@ -2556,11 +2567,21 @@ public class Cadastros extends javax.swing.JFrame {
 
     private void buttonVPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonVPagarActionPerformed
         cadastroVenda();
+        limparTabela();
     }//GEN-LAST:event_buttonVPagarActionPerformed
 
     private void buttonVPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonVPesquisarActionPerformed
         listaVendas();
     }//GEN-LAST:event_buttonVPesquisarActionPerformed
+
+    private void buttonExibirVCadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExibirVCadActionPerformed
+        viewChange("cadastroVenda");
+    }//GEN-LAST:event_buttonExibirVCadActionPerformed
+
+    private void buttonVLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonVLimparActionPerformed
+        limparCampos(tfVendaCPFC, tfVendaProduto, tfVendaCodigo, tfVendaPreco, tfVendaQtd);
+        limparTabela();
+    }//GEN-LAST:event_buttonVLimparActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -2684,7 +2705,7 @@ public class Cadastros extends javax.swing.JFrame {
     private javax.swing.JTextField tfFTelefone;
     private javax.swing.JTextField tfNomeC;
     private javax.swing.JTextField tfTelefoneC;
-    private javax.swing.JTextField tfVendaCPF;
+    private javax.swing.JTextField tfVendaCPFC;
     private javax.swing.JTextField tfVendaCodigo;
     private javax.swing.JTextField tfVendaData;
     private javax.swing.JTextField tfVendaPreco;

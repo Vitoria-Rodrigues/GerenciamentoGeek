@@ -230,6 +230,7 @@ public class Pagamento extends javax.swing.JDialog {
 
     private void buttonPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonPagarActionPerformed
         formaPag();
+        this.dispose();
     }//GEN-LAST:event_buttonPagarActionPerformed
  
 
