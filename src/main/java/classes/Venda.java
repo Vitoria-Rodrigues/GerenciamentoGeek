@@ -42,7 +42,7 @@ public class Venda {
     @JoinColumn(name = "funcionario_id", unique = true)
     private Funcionario funcionario;
     
-    @OneToOne(mappedBy = "venda", cascade=CascadeType.PERSIST)
+    @OneToOne(mappedBy = "venda", cascade=CascadeType.ALL)
     private FormaPagamento formapagamento;
     
     @ManyToMany

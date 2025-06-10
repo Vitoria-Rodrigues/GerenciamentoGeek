@@ -24,4 +24,6 @@ public class FormaPagamentoDAO {
             JPAUtil.closeEntityManager();
         }
     }
+    
+    
 }

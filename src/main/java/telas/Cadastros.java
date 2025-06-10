@@ -56,14 +56,12 @@ public class Cadastros extends javax.swing.JFrame {
             buttonExibirCExcluir.setEnabled(false);
             buttonExibirVExcluir.setEnabled(false);
             buttonExibirVExcluir.setVisible(false);
-            buttonExibirVExcluir.setEnabled(false);
         } else if (login.getFuncionario().getCargo().getFuncao().equals("Caixa")) {
             buttonCadastrarF.setVisible(false);
             buttonExibirF.setVisible(false);
             buttonExibirCExcluir.setEnabled(false);
             buttonExibirVExcluir.setEnabled(false);
             buttonExibirVExcluir.setVisible(false);
-            buttonExibirVExcluir.setEnabled(false);
         } else if(login.getFuncionario().getCargo().getFuncao().equals("Gerente")){
             buttonExibirVExcluir.setVisible(false);
             buttonExibirVExcluir.setEnabled(false);
@@ -162,7 +160,8 @@ public class Cadastros extends javax.swing.JFrame {
 
         for (ItemCarrinho item : carrinho) {
             Double subtotal = item.getQtd() * item.getProduto().getPreco();
-            String[] linha = {String.valueOf(item.getProduto().getCodigoProd()), item.getProduto().getNomeProd(),
+            String[] linha = {String.valueOf(item.getProduto().getCodigoProd()), 
+                item.getProduto().getNomeProd(),
                 String.valueOf(item.getQtd()), String.valueOf(item.getProduto().getPreco()),
                 "R$" + subtotal.toString()};
             modelo.addRow(linha);
@@ -304,7 +303,7 @@ public class Cadastros extends javax.swing.JFrame {
         }
     }
     
-    public void cadastroVenda() { //Método para cadastrar o produto no banco de dados       
+    public void cadastroVenda() { //Método para cadastrar a venda no banco de dados       
         Venda venda = new Venda();
         venda.setCliente(cliente);
         venda.setFuncionario(login.getFuncionario());
