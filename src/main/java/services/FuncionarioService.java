@@ -1,6 +1,7 @@
 
 package services;
 
+import classes.Cargo;
 import classes.Funcionario;
 import classesDAO.FuncionarioDAO;
 import java.util.List;
@@ -24,6 +25,15 @@ public class FuncionarioService {
             Alerta.Sucesso("Sucesso!", "Edição realizar com sucesso!");
         } catch(Exception e){
             Alerta.Erro("Erro ao editar", "Ocorreu um erro ao editar as informações");
+        }
+    }
+    
+    public List<Cargo> listarCargo(String cpf){
+        try{
+            return funcionarioDAO.listarCargos();
+        }catch (Exception e){
+            Alerta.Erro("Erro listagem", "Erro ao buscar informação para lista");
+            return List.of();
         }
     }
     
