@@ -4,113 +4,84 @@ import classes.Cargo;
 import classes.Funcionario;
 import classes.JPAUtil;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.Query;
-import java.util.ArrayList;
+import jakarta.persistence.TypedQuery;
 import java.util.List;
-import validacao.Alerta;
 
 public class FuncionarioDAO {
     
-    public static List<Cargo> pegarCargos(){
+    public void salvar(Funcionario funcionario){
+        executarTransacao(em -> em.persist(funcionario));
+    }
+    
+    public void atualizar(Funcionario funcionario){
+        executarTransacao(em -> em.merge(funcionario));
+    }
+    
+    public Funcionario buscarPorId(String id){
         EntityManager em = JPAUtil.getEntityManager();
-        List<Cargo> cargos = new ArrayList<>();
         try{
-            Query consulta = em.createQuery("SELECT c FROM Cargo c", Cargo.class);
-            cargos = consulta.getResultList();
-            return cargos;
-        } catch(Exception e){
-             Alerta.Erro("Erro de consulta", "Erro ao consultar os cargos");
-    }
-        return cargos;
-  }
-    public static void cadastrarFuncionario(Funcionario funcionario){
-        EntityManager em = JPAUtil.getEntityManager();
-        try {
-            em.getTransaction().begin();
-            em.persist(funcionario);
-            em.getTransaction().commit();
-            Alerta.Sucesso("Cadastro concluído!", "Funcionario cadastrado com sucesso!");            
-            
-        } catch (Exception e) {
-            em.getTransaction().rollback();
-            Alerta.Erro("Erro ao inserir o cadastro no banco", "Erro no cadastro");
-        } finally {
-            JPAUtil.closeEntityManager();
+            return em.find(Funcionario.class, id);
+        } finally{
+            em.close();
         }
     }
     
-    public static List<Funcionario> listarFuncionarios(String cpf){
+    public List<Funcionario> buscarPorCPF(String cpf) {
         EntityManager em = JPAUtil.getEntityManager();
-        List<Funcionario> listaFunc = new ArrayList<>();
-        Query consulta;
-
         try {
-            if (cpf.equals("")) {
-                consulta = em.createQuery("SELECT funcionario FROM Funcionario funcionario");
-                listaFunc = consulta.getResultList();
-            } else {
-                consulta = em.createQuery("SELECT f from Cliente f WHERE f.cpfC = :cpfF");
-                consulta.setParameter("cpfF", cpf);
-                listaFunc = consulta.getResultList();
-            }
-            return listaFunc;
-        } catch (Exception e) {
-            Alerta.Erro("Erro listagem", "Erro as buscar informação para lista");
-        }
-        return listaFunc;
-    }
-    
-    public static Funcionario listarFuncionario(String idFuncionario) {
-    EntityManager em = JPAUtil.getEntityManager();
-    Funcionario funcionario = null;
-
-    try {
-        Query query = em.createQuery(
-            "SELECT f FROM Funcionario f LEFT JOIN FETCH f.login WHERE f.id = :id",
-            Funcionario.class
-        );
-        query.setParameter("id", Long.parseLong(idFuncionario));
-        funcionario = (Funcionario) query.getSingleResult();
-        return funcionario;
-    } catch (Exception e) {
-        Alerta.Erro("Erro ao listar", "Erro ao listar o funcionario");
-    } finally {
-        em.close();
-    }
-    return funcionario;
-}
-    
-    public static void editarFuncionario(Funcionario funcionario) {
-        EntityManager em = JPAUtil.getEntityManager();
-
-        try {
-            em.getTransaction().begin();
-            em.merge(funcionario);
-            em.getTransaction().commit();
-            Alerta.Sucesso("Sucesso!", "Edição realizada com sucesso!");
-
-        } catch (Exception e) {
-            em.getTransaction().rollback();
-            Alerta.Erro("Erro ao editar", "Ocorreu um erro ao editar as informações do cliente.");
+            TypedQuery<Funcionario> query = em.createQuery("SELECT f FROM Funcionario f WHERE f.cpfF = :cpfF", Funcionario.class);
+            query.setParameter("cpfF", cpf);
+            return query.getResultList();
         } finally {
             em.close();
         }
     }
     
-    public static void excluirFuncionario(String id) {
+    public List<Funcionario> listarTodos(){
         EntityManager em = JPAUtil.getEntityManager();
-
-        try {
-            em.getTransaction().begin();
-            Funcionario funcionariosRemover = em.find(Funcionario.class, id);
-            em.remove(funcionariosRemover);
-            em.getTransaction().commit();
-
-        } catch (Exception e) {
-            Alerta.Erro("Erro excluir", "Erro ao excluir o cliente no banco");
-        } finally {
-            JPAUtil.closeEntityManager();
+        try{
+            TypedQuery<Funcionario> query = em.createQuery("SELECT f FROM Funcionario f", Funcionario.class);
+            return query.getResultList();
+        } finally{
+            em.close();
         }
     }
     
+    public List<Cargo> listarCargos(){
+        EntityManager em = JPAUtil.getEntityManager();
+        try{
+            TypedQuery<Cargo> query = em.createQuery("SELECT c FROM Cargos c", Cargo.class);
+            return query.getResultList();
+        } finally{
+            em.close();
+        }
+    }
+    
+    public void excluir(String id) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            em.getTransaction().begin();
+            Funcionario funcionario = em.find(Funcionario.class, id);
+            if(funcionario != null){
+            em.remove(funcionario);
+            }
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+    }
+    
+    private void executarTransacao(java.util.function.Consumer<EntityManager> acao) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            em.getTransaction().begin();
+            acao.accept(em);
+            em.getTransaction().commit();
+        } catch (RuntimeException e) {
+            em.getTransaction().rollback();
+            throw e;
+        } finally {
+            em.close();
+        }
+    }
 }
