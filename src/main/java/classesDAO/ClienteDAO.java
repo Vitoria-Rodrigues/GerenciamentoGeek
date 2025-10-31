@@ -2,6 +2,7 @@ package classesDAO;
 
 import classes.Cliente;
 import classes.JPAUtil;
+import classes.Produto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
@@ -41,6 +42,20 @@ public class ClienteDAO {
             TypedQuery<Cliente> query = em.createQuery("SELECT c FROM Cliente c WHERE c.cpfC = :cpfC", Cliente.class);
             query.setParameter("cpfC", cpf);
             return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+    
+    public void excluir(String id) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            em.getTransaction().begin();
+            Cliente cliente = em.find(Cliente.class, id);
+            if(cliente != null){
+            em.remove(cliente);
+            }
+        em.getTransaction().commit();
         } finally {
             em.close();
         }
