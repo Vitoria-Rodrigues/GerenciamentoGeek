@@ -4,58 +4,59 @@ package services;
 import classes.Cliente;
 import classesDAO.ClienteDAO;
 import java.util.List;
-import validacao.Alerta;
 
 
 public class ClienteService {
     private ClienteDAO clienteDAO = new ClienteDAO();
     
-    public void cadastrarCliente(Cliente cliente){
-        try{
-            clienteDAO.salvar(cliente);
-            Alerta.Sucesso("Cadastro concluído!", "Cliente cadastrado com sucesso!");
-        } catch(Exception e){
-            Alerta.Erro("Erro no cadastro", "Erro ao inserir o cadastro no banco");
+    public ClienteService() {
+        this.clienteDAO = new ClienteDAO();
+    }
+
+    public void salvarCliente(Cliente cliente) {
+        if (cliente == null) {
+            throw new IllegalArgumentException("Cliente não pode ser nulo!");
         }
+
+        if (cliente.getNomeC() == null || cliente.getNomeC().isBlank()) {
+            throw new IllegalArgumentException("O nome do cliente é obrigatório!");
+        }
+
+        if (cliente.getCpfC() == null || cliente.getCpfC().isBlank()) {
+            throw new IllegalArgumentException("O CPF do cliente é obrigatório!");
+        }
+
+        clienteDAO.salvar(cliente);
+    }
+
+    
+    public void editarCliente(Cliente cliente) {
+        if (cliente == null || cliente.getId() == null) {
+            throw new IllegalArgumentException("Cliente inválido para atualização!");
+        }
+        clienteDAO.atualizar(cliente);
     }
     
-    public void editarCliente(Cliente cliente){
-        try{
-            clienteDAO.atualizar(cliente);
-            Alerta.Sucesso("Sucesso!", "Edição realizar com sucesso!");
-        } catch(Exception e){
-            Alerta.Erro("Erro ao editar", "Ocorreu um erro ao editar as informações");
-        }
+    public Cliente buscarPorId(String id) {
+        return clienteDAO.buscarPorId(id);
     }
-    
-    public List<Cliente> listarClientes(String cpf){
-        try{
-            if(cpf == null || cpf.isEmpty()){
-                return clienteDAO.listarTodos();
-            }
-            return clienteDAO.buscarPorCPF(cpf);
-        }catch (Exception e){
-            Alerta.Erro("Erro listagem", "Erro ao buscar informação para lista");
-            return List.of();
-        }
+
+    public List<Cliente> listarClientes() {
+        return clienteDAO.listarTodos();
     }
-    
-    public Cliente buscarCliente(String idCliente){
-        try{
-            return clienteDAO.buscarPorId(idCliente);
-        }catch(Exception e){
-            Alerta.Erro("Erro", "Erro ao listar o cliente");
-            return null;
+
+    public List<Cliente> buscarPorCPF(String cpf) {
+        if (cpf == null || cpf.isBlank()) {
+            throw new IllegalArgumentException("CPF não pode estar vazio!");
         }
+        return clienteDAO.buscarPorCPF(cpf);
     }
-    
-    public void deletarCliente(String idCliente){
-        try{
-            clienteDAO.excluir(idCliente);
-            Alerta.Sucesso("Sucesso!", "Cliente excluido com sucesso!");
-        } catch(Exception e){
-            Alerta.Erro("Erro na exclusão", "Erro ao excluir o cadastro no banco");
+
+    public void excluirCliente(String id) {
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("ID do cliente inválido!");
         }
+        clienteDAO.excluir(id);
     }
 }
 
