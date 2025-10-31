@@ -19,7 +19,7 @@ public class FuncionarioService {
         }
     }
     
-    public void editarCliente(Funcionario funcionario){
+    public void editarFuncionario(Funcionario funcionario){
         try{
             funcionarioDAO.atualizar(funcionario);
             Alerta.Sucesso("Sucesso!", "Edição realizar com sucesso!");
@@ -55,6 +55,15 @@ public class FuncionarioService {
         }catch(Exception e){
             Alerta.Erro("Erro", "Erro ao listar o funcionario");
             return null;
+        }
+    }
+    
+    public void deletarFuncionario(String idFuncionario){
+        try{
+            funcionarioDAO.excluir(idFuncionario);
+            Alerta.Sucesso("Sucesso!", "Funcionario excluido com sucesso!");
+        } catch(Exception e){
+            Alerta.Erro("Erro na exclusão", "Erro ao excluir o cadastro no banco");
         }
     }
     
