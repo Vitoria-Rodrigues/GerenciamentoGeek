@@ -48,6 +48,15 @@ public class ClienteService {
             return null;
         }
     }
+    
+    public void deletarCliente(String idCliente){
+        try{
+            clienteDAO.excluir(idCliente);
+            Alerta.Sucesso("Sucesso!", "Cliente excluido com sucesso!");
+        } catch(Exception e){
+            Alerta.Erro("Erro na exclusão", "Erro ao excluir o cadastro no banco");
+        }
+    }
 }
 
 
