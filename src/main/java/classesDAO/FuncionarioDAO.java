@@ -1,6 +1,5 @@
 package classesDAO;
 
-import classes.Cargo;
 import classes.Funcionario;
 import classes.JPAUtil;
 import jakarta.persistence.EntityManager;
@@ -46,17 +45,7 @@ public class FuncionarioDAO {
             em.close();
         }
     }
-    
-    public List<Cargo> listarCargos(){
-        EntityManager em = JPAUtil.getEntityManager();
-        try{
-            TypedQuery<Cargo> query = em.createQuery("SELECT c FROM Cargos c", Cargo.class);
-            return query.getResultList();
-        } finally{
-            em.close();
-        }
-    }
-    
+
     public void excluir(String id) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
