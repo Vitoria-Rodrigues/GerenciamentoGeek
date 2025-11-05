@@ -1,0 +1,31 @@
+
+package classesDAO;
+
+import classes.Cargo;
+import classes.JPAUtil;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+import java.util.List;
+
+public class CargoDAO {
+    
+    public Cargo buscarPorId(Long id) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return em.find(Cargo.class, id);
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<Cargo> pegarCargos(){
+        EntityManager em = JPAUtil.getEntityManager();
+        try{
+            TypedQuery<Cargo> query = em.createQuery("SELECT c FROM Cargos c", Cargo.class);
+            return query.getResultList();
+        } finally{
+            em.close();
+        }
+    }
+
+}
