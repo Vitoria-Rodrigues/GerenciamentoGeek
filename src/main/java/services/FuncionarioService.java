@@ -1,18 +1,35 @@
 
 package services;
 
+import classes.Cargo;
 import classes.Funcionario;
+import classesDAO.CargoDAO;
 import classesDAO.FuncionarioDAO;
 import java.util.List;
 
 public class FuncionarioService {
     private final FuncionarioDAO funcionarioDAO;
+    private final CargoDAO cargoDAO;
 
     public FuncionarioService() {
         this.funcionarioDAO = new FuncionarioDAO();
+        this.cargoDAO = new CargoDAO();
     }
 
     public void salvarFuncionario(Funcionario funcionario) {
+        validacaoFuncionario(funcionario);
+        funcionarioDAO.salvar(funcionario);
+    }
+    
+    public void atualizarFuncionario(Funcionario funcionario) {
+        if (funcionario == null || funcionario.getId() == null) {
+            throw new IllegalArgumentException("Funcionário inválido para atualização!");
+        }
+        validacaoFuncionario(funcionario);
+        funcionarioDAO.atualizar(funcionario);
+    }
+    
+    private void validacaoFuncionario(Funcionario funcionario){
         if (funcionario == null) {
             throw new IllegalArgumentException("Funcionário não pode ser nulo!");
         }
@@ -43,17 +60,18 @@ public class FuncionarioService {
         
         else if (funcionario.getTelefoneF()== null || funcionario.getTelefoneF().isBlank()) {
             throw new IllegalArgumentException("O complemento do funcionário é obrigatório!");
+        }     
+        
+        else if (funcionario.getCargo() == null || funcionario.getCargo().getId() == null) {
+            throw new IllegalArgumentException("O funcionário deve possuir um cargo válido!");
         }
+        
+        List<Cargo> cargos = cargoDAO.pegarCargos();
 
-        funcionarioDAO.salvar(funcionario);
-    }
-
-    public void atualizarFuncionario(Funcionario funcionario) {
-        if (funcionario == null || funcionario.getId() == null) {
-            throw new IllegalArgumentException("Funcionário inválido para atualização!");
+        Cargo cargoExistente = cargoDAO.buscarPorId(funcionario.getCargo().getId());
+        if (cargoExistente == null) {
+            throw new IllegalArgumentException("O cargo informado não existe no banco de dados!");
         }
-
-        funcionarioDAO.atualizar(funcionario);
     }
 
     public Funcionario buscarPorId(String id) {
