@@ -1,70 +1,81 @@
 
 package services;
 
-import classes.Cargo;
 import classes.Funcionario;
 import classesDAO.FuncionarioDAO;
 import java.util.List;
-import validacao.Alerta;
 
 public class FuncionarioService {
-    private FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
-    
-    public void cadastrarFuncionario(Funcionario funcionario){
-        try{
-            funcionarioDAO.salvar(funcionario);
-            Alerta.Sucesso("Cadastro concluído!", "Funcionario cadastrado com sucesso!");
-        } catch(Exception e){
-            Alerta.Erro("Erro no cadastro", "Erro ao inserir o cadastro no banco");
-        }
+    private final FuncionarioDAO funcionarioDAO;
+
+    public FuncionarioService() {
+        this.funcionarioDAO = new FuncionarioDAO();
     }
-    
-    public void editarFuncionario(Funcionario funcionario){
-        try{
-            funcionarioDAO.atualizar(funcionario);
-            Alerta.Sucesso("Sucesso!", "Edição realizar com sucesso!");
-        } catch(Exception e){
-            Alerta.Erro("Erro ao editar", "Ocorreu um erro ao editar as informações");
+
+    public void salvarFuncionario(Funcionario funcionario) {
+        if (funcionario == null) {
+            throw new IllegalArgumentException("Funcionário não pode ser nulo!");
         }
-    }
-    
-    public List<Cargo> listarCargo(String cpf){
-        try{
-            return funcionarioDAO.listarCargos();
-        }catch (Exception e){
-            Alerta.Erro("Erro listagem", "Erro ao buscar informação para lista");
-            return List.of();
+
+        else if (funcionario.getNomeF() == null || funcionario.getNomeF().isBlank()) {
+            throw new IllegalArgumentException("O nome do funcionário é obrigatório!");
         }
-    }
-    
-    public List<Funcionario> listarFuncionarios(String cpf){
-        try{
-            if(cpf == null || cpf.isEmpty()){
-                return funcionarioDAO.listarTodos();
-            }
-            return funcionarioDAO.buscarPorCPF(cpf);
-        }catch (Exception e){
-            Alerta.Erro("Erro listagem", "Erro ao buscar informação para lista");
-            return List.of();
+
+        else if (funcionario.getCpfF() == null || funcionario.getCpfF().isBlank()) {
+            throw new IllegalArgumentException("O CPF do funcionário é obrigatório!");
         }
-    }
-    
-    public Funcionario buscarFuncionario(String idFuncionario){
-        try{
-            return funcionarioDAO.buscarPorId(idFuncionario);
-        }catch(Exception e){
-            Alerta.Erro("Erro", "Erro ao listar o funcionario");
-            return null;
+        
+        else if (funcionario.getCep() == null || funcionario.getCep().isBlank()) {
+            throw new IllegalArgumentException("O CEP do funcionário é obrigatório!");
         }
-    }
-    
-    public void deletarFuncionario(String idFuncionario){
-        try{
-            funcionarioDAO.excluir(idFuncionario);
-            Alerta.Sucesso("Sucesso!", "Funcionario excluido com sucesso!");
-        } catch(Exception e){
-            Alerta.Erro("Erro na exclusão", "Erro ao excluir o cadastro no banco");
+        
+        else if (funcionario.getLogradouro() == null || funcionario.getLogradouro().isBlank()) {
+            throw new IllegalArgumentException("O Logradouro do funcionário é obrigatório!");
         }
+        
+        else if (funcionario.getNumero() == null || funcionario.getNumero().isBlank()) {
+            throw new IllegalArgumentException("O Numero da residencia do funcionário é obrigatório!");
+        }
+        
+        else if (funcionario.getComplemento() == null || funcionario.getComplemento().isBlank()) {
+            throw new IllegalArgumentException("O complemento do funcionário é obrigatório!");
+        }
+        
+        else if (funcionario.getTelefoneF()== null || funcionario.getTelefoneF().isBlank()) {
+            throw new IllegalArgumentException("O complemento do funcionário é obrigatório!");
+        }
+
+        funcionarioDAO.salvar(funcionario);
     }
-    
+
+    public void atualizarFuncionario(Funcionario funcionario) {
+        if (funcionario == null || funcionario.getId() == null) {
+            throw new IllegalArgumentException("Funcionário inválido para atualização!");
+        }
+
+        funcionarioDAO.atualizar(funcionario);
+    }
+
+    public Funcionario buscarPorId(String id) {
+        return funcionarioDAO.buscarPorId(id);
+    }
+
+    public List<Funcionario> listarFuncionarios() {
+        return funcionarioDAO.listarTodos();
+    }
+
+    public List<Funcionario> buscarPorCPF(String cpf) {
+        if (cpf == null || cpf.isBlank()) {
+            throw new IllegalArgumentException("CPF não pode estar vazio!");
+        }
+        return funcionarioDAO.buscarPorCPF(cpf);
+    }
+
+    public void excluirFuncionario(String id) {
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("ID do funcionário inválido!");
+        }
+
+        funcionarioDAO.excluir(id);
+    }
 }
