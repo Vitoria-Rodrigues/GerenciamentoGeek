@@ -26,7 +26,7 @@ public class CargoDAO {
         }
     }
     
-   public void excluir(String id) {
+   public void excluir(Long id) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
             em.getTransaction().begin();
