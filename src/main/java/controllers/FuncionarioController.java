@@ -4,7 +4,6 @@ package controllers;
 import classes.Funcionario;
 import java.util.List;
 import services.FuncionarioService;
-import validacao.Alerta;
 
 
 public class FuncionarioController {
