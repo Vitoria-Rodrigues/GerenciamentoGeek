@@ -4,7 +4,6 @@ package controllers;
 import classes.Cargo;
 import java.util.List;
 import services.CargoService;
-import validacao.Alerta;
 
 public class CargoController {
     private final CargoService cargoService;
@@ -16,11 +15,11 @@ public class CargoController {
     public void salvarCargo(Cargo cargo) {
         try {
             cargoService.salvarCargo(cargo);
-            Alerta.Erro("Cadastro concluído!", "Cargo cadastrado com sucesso!");
+            System.out.println("Cargo cadastrado com sucesso!");
         } catch (IllegalArgumentException e) {
-            Alerta.Erro("Erro no cadastro", e.getMessage());
+            System.out.println("Erro no cadastro");
         } catch (Exception e) {
-            Alerta.Erro("Erro inesperado", "Falha ao cadastrar o cargo no sistema.");
+            System.out.println("Falha ao cadastrar o cargo no sistema.");
           
         }
     }
@@ -28,11 +27,11 @@ public class CargoController {
     public void atualizarCargo(Cargo cargo) {
         try {
             cargoService.atualizarCargo(cargo);
-            Alerta.Erro("Atualização concluída!", "Cargo atualizado com sucesso!");
+            System.out.println("Cargo atualizado com sucesso!");
         } catch (IllegalArgumentException e) {
-            Alerta.Erro("Erro na atualização", e.getMessage());
+            System.out.println("Erro na atualização");
         } catch (Exception e) {
-            Alerta.Erro("Erro inesperado", "Falha ao atualizar o cargo no sistema.");
+            System.out.println("Falha ao atualizar o cargo no sistema.");
             
         }
     }
@@ -41,7 +40,7 @@ public class CargoController {
         try {
             return cargoService.listarCargos();
         } catch (Exception e) {
-            Alerta.Erro("Erro na listagem", "Falha ao listar os cargos cadastrados.");
+            System.out.println("Falha ao listar os cargos cadastrados.");
            
             return null;
         }
@@ -51,9 +50,9 @@ public class CargoController {
         try {
             return cargoService.buscarPorId(id);
         } catch (IllegalArgumentException e) {
-            Alerta.Erro("Erro na busca", e.getMessage());
+            System.out.println("Erro na busca");
         } catch (Exception e) {
-            Alerta.Erro("Erro inesperado", "Falha ao buscar o cargo pelo ID.");
+            System.out.println("Falha ao buscar o cargo pelo ID.");
            
         }
         return null;
@@ -62,11 +61,11 @@ public class CargoController {
     public void excluirCargo(Long id) {
         try {
             cargoService.excluirCargo(id);
-            Alerta.Erro("Exclusão concluída!", "Cargo removido com sucesso!");
+            System.out.println("Cargo removido com sucesso!");
         } catch (IllegalArgumentException e) {
-            Alerta.Erro("Erro na exclusão", e.getMessage());
+            System.out.println("Erro na exclusão");
         } catch (Exception e) {
-            Alerta.Erro("Erro inesperado", "Falha ao excluir o cargo do sistema.");
+            System.out.println("Falha ao excluir o cargo do sistema.");
            
         }
     }
