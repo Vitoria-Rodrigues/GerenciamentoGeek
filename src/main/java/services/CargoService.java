@@ -17,4 +17,8 @@ public class CargoService {
     public List<Cargo> listarCargos() {
         return cargoDAO.pegarCargos();
     }
+    
+    public Cargo buscarPorId(String id) {
+        return cargoDAO.buscarPorId(id);
+    }
 }
