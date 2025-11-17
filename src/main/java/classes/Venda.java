@@ -53,6 +53,19 @@ public class Venda {
     ) 
     private List<Produto> prod = new ArrayList<>();
 
+    public Venda() {
+    }
+
+    public Venda(LocalDate dataVenda, Double totalVenda, int qtdVenda, Cliente cliente, Funcionario funcionario, FormaPagamento formapagamento) {
+        this.dataVenda = dataVenda;
+        this.totalVenda = totalVenda;
+        this.qtdVenda = qtdVenda;
+        this.cliente = cliente;
+        this.funcionario = funcionario;
+        this.formapagamento = formapagamento;
+    }
+   
+    
     public Long getId() {
         return id;
     }

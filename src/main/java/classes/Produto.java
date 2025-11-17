@@ -36,6 +36,19 @@ public class Produto {
     @JoinColumn(name = "categoria_id", unique = true)
     private Categoria categoria;
 
+    public Produto() {
+    }
+
+    public Produto(String nomeProd, String descProd, Double preco, int qtdEstoque, int codigoProd, Categoria categoria) {
+        this.nomeProd = nomeProd;
+        this.descProd = descProd;
+        this.preco = preco;
+        this.qtdEstoque = qtdEstoque;
+        this.codigoProd = codigoProd;
+        this.categoria = categoria;
+    }
+
+
     public Long getId() {
         return id;
     }

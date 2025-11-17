@@ -28,6 +28,13 @@ public class Cliente {
     @Column(name = "telefoneC")
     private String telefoneC;
 
+    public Cliente(String nomeC, String cpfC, String sexoC, String telefoneC) {
+        this.nomeC = nomeC;
+        this.cpfC = cpfC;
+        this.sexoC = sexoC;
+        this.telefoneC = telefoneC;
+    }
+
     public Long getId() {
         return id;
     }

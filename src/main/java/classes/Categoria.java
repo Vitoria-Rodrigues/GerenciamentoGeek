@@ -19,6 +19,14 @@ public class Categoria {
     @Column(name = "nomeCateg")
     private String nomeCateg;
 
+    public Categoria() {
+    }
+
+    public Categoria(String nomeCateg) {
+        this.nomeCateg = nomeCateg;
+    }
+    
+
     public Long getId() {
         return id;
     }

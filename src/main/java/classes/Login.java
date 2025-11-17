@@ -28,8 +28,16 @@ public class Login {
     @OneToOne
     @JoinColumn(name = "funcionario_id", unique = true)
     private Funcionario funcionario;
-    
 
+    public Login() {
+    }
+
+    public Login(String login, String senha, Funcionario funcionario) {
+        this.login = login;
+        this.senha = senha;
+        this.funcionario = funcionario;
+    }
+    
     public Long getId() {
         return id;
     }

@@ -48,6 +48,22 @@ public class Funcionario {
     @JoinColumn(name = "cargo_id", unique = true)
     private Cargo cargo;
 
+    public Funcionario() {
+    }
+
+    public Funcionario(String nomeF, String cpfF, String logradouro, String cep, String numero, String complemento, String telefoneF, Login login, Cargo cargo) {
+        this.nomeF = nomeF;
+        this.cpfF = cpfF;
+        this.logradouro = logradouro;
+        this.cep = cep;
+        this.numero = numero;
+        this.complemento = complemento;
+        this.telefoneF = telefoneF;
+        this.login = login;
+        this.cargo = cargo;
+    }
+    
+
     public Long getId() {
         return id;
     }

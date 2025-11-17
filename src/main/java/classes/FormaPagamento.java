@@ -27,6 +27,15 @@ public class FormaPagamento {
     @JoinColumn(name = "venda_id", unique = true)
     private Venda venda;
 
+    public FormaPagamento() {
+    }
+
+    public FormaPagamento(String metodoPag, int parcelasPag, Venda venda) {
+        this.metodoPag = metodoPag;
+        this.parcelasPag = parcelasPag;
+        this.venda = venda;
+    }
+
     public Long getId() {
         return id;
     }
