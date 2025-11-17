@@ -13,6 +13,11 @@ public class VendaService {
     public VendaService() {
         this.vendaDAO = new VendaDAO();
     }
+    
+    public void cadastrarVenda(Venda venda) {
+        validarVenda(venda);
+        vendaDAO.cadastrarVenda(venda);
+    }
 
     public Cliente buscarClientePorCPF(String cpf) {
         if (cpf == null || cpf.isBlank()) {
