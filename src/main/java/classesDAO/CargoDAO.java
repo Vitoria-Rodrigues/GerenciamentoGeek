@@ -9,37 +9,6 @@ import java.util.List;
 
 public class CargoDAO {
     
-    public void salvar(Cargo cargo){
-        executarTransacao(em -> em.persist(cargo));
-    }
-    
-    public void atualizar(Cargo cargo){
-        executarTransacao(em -> em.merge(cargo));
-    }
-
-    public Cargo buscarPorId(Long id) {
-        EntityManager em = JPAUtil.getEntityManager();
-        try {
-            return em.find(Cargo.class, id);
-        } finally {
-            em.close();
-        }
-    }
-    
-   public void excluir(Long id) {
-        EntityManager em = JPAUtil.getEntityManager();
-        try {
-            em.getTransaction().begin();
-            Cargo cargo = em.find(Cargo.class, id);
-            if(cargo != null){
-            em.remove(cargo);
-            }
-            em.getTransaction().commit();
-        } finally {
-            em.close();
-        }
-    }
-   
     public List<Cargo> pegarCargos(){
         EntityManager em = JPAUtil.getEntityManager();
         try{
@@ -50,16 +19,11 @@ public class CargoDAO {
         }
     }
     
-    private void executarTransacao(java.util.function.Consumer<EntityManager> acao) {
+    public Cargo buscarPorId(String id){
         EntityManager em = JPAUtil.getEntityManager();
-        try {
-            em.getTransaction().begin();
-            acao.accept(em);
-            em.getTransaction().commit();
-        } catch (RuntimeException e) {
-            em.getTransaction().rollback();
-            throw e;
-        } finally {
+        try{
+            return em.find(Cargo.class, id);
+        } finally{
             em.close();
         }
     }
