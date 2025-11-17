@@ -9,8 +9,9 @@ public class FuncionarioDTO {
     private String telefone;
     private String numero;
     private String complemento;
+    private Long cargo;
 
-    public FuncionarioDTO(String nome, String cpf, String logradouro, String cep, String telefone, String numero, String complemento) {
+    public FuncionarioDTO(String nome, String cpf, String logradouro, String cep, String telefone, String numero, String complemento, Long cargo) {
         this.nome = nome;
         this.cpf = cpf;
         this.logradouro = logradouro;
@@ -18,6 +19,7 @@ public class FuncionarioDTO {
         this.telefone = telefone;
         this.numero = numero;
         this.complemento = complemento;
+        this.cargo = cargo;
     }
 
     public String getNome() {
@@ -76,4 +78,12 @@ public class FuncionarioDTO {
         this.complemento = complemento;
     }
 
+    public Long getCargo() {
+        return cargo;
+    }
+
+    public void setCargo(Long cargo) {
+        this.cargo = cargo;
+    }
+    
 }
