@@ -12,6 +12,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VendaDAO {
+    
+    public void cadastrarVenda(Venda venda) {
+        EntityManager em = JPAUtil.getEntityManager();
+
+        try {
+            em.getTransaction().begin();
+            em.persist(venda);              
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            throw e; 
+        } finally {
+            em.close();
+        }
+    }
 
     public Cliente listarCPF(String cpf) {
         EntityManager em = JPAUtil.getEntityManager();
