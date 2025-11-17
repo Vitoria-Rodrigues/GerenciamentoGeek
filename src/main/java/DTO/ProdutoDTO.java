@@ -7,13 +7,15 @@ public class ProdutoDTO {
     private Double preco;
     private int qtdEstoque;
     private int codigo;
+    private Long categoria;
 
-    public ProdutoDTO(String nome, String desc, Double preco, int qtdEstoque, int codigo) {
+    public ProdutoDTO(String nome, String desc, Double preco, int qtdEstoque, int codigo, Long categoria) {
         this.nome = nome;
         this.desc = desc;
         this.preco = preco;
         this.qtdEstoque = qtdEstoque;
         this.codigo = codigo;
+        this.categoria = categoria;
     }
 
     public String getNome() {
@@ -55,5 +57,13 @@ public class ProdutoDTO {
     public void setCodigo(int codigo) {
         this.codigo = codigo;
     }
-    
+
+    public Long getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Long categoria) {
+        this.categoria = categoria;
+    }
+ 
 }
