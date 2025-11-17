@@ -28,6 +28,9 @@ public class Cliente {
     @Column(name = "telefoneC")
     private String telefoneC;
 
+    public Cliente() {
+    }
+    
     public Cliente(String nomeC, String cpfC, String sexoC, String telefoneC) {
         this.nomeC = nomeC;
         this.cpfC = cpfC;
