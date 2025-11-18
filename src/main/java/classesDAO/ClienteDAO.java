@@ -2,7 +2,6 @@ package classesDAO;
 
 import classes.Cliente;
 import classes.JPAUtil;
-import classes.Produto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
@@ -17,7 +16,7 @@ public class ClienteDAO {
         executarTransacao(em -> em.merge(cliente));
     }
     
-    public Cliente buscarPorId(String id){
+    public Cliente buscarPorId(Long id){
         EntityManager em = JPAUtil.getEntityManager();
         try{
             return em.find(Cliente.class, id);
