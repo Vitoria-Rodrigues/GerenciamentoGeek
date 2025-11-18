@@ -11,6 +11,9 @@ public class VendaDTO {
     private String formaPagamento;
     private int parcelasPagamento;
 
+    public VendaDTO() {
+    }
+
     public VendaDTO(String data, Double total, int qtd, String cpfCliente, Long idFuncionario, int codProduto, String formaPagamento, int parcelasPagamento) {
         this.data = data;
         this.total = total;

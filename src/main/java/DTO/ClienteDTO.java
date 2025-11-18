@@ -7,6 +7,9 @@ public class ClienteDTO {
     private String sexo;
     private String telefone;
 
+    public ClienteDTO() {
+    }
+
     public ClienteDTO(String nome, String cpf, String sexo, String telefone) {
         this.nome = nome;
         this.cpf = cpf;

@@ -9,6 +9,9 @@ public class ProdutoDTO {
     private int codigo;
     private Long categoria;
 
+    public ProdutoDTO() {
+    }
+
     public ProdutoDTO(String nome, String desc, Double preco, int qtdEstoque, int codigo, Long categoria) {
         this.nome = nome;
         this.desc = desc;

@@ -11,6 +11,9 @@ public class FuncionarioDTO {
     private String complemento;
     private Long cargo;
 
+    public FuncionarioDTO() {
+    }
+
     public FuncionarioDTO(String nome, String cpf, String logradouro, String cep, String telefone, String numero, String complemento, Long cargo) {
         this.nome = nome;
         this.cpf = cpf;
