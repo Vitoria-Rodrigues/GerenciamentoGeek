@@ -32,12 +32,20 @@ public class Cliente {
     }
     
     public Cliente(String nomeC, String cpfC, String sexoC, String telefoneC) {
+        if (nomeC == null || nomeC.isBlank()) {
+            throw new IllegalArgumentException("O nome do cliente é obrigatório!");
+        }
+
+        if (cpfC== null || cpfC.isBlank()) {
+            throw new IllegalArgumentException("O CPF do cliente é obrigatório!");
+        }
+        
         this.nomeC = nomeC;
         this.cpfC = cpfC;
         this.sexoC = sexoC;
         this.telefoneC = telefoneC;
     }
-
+        
     public Long getId() {
         return id;
     }
