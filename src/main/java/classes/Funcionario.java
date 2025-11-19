@@ -52,6 +52,38 @@ public class Funcionario {
     }
 
     public Funcionario(String nomeF, String cpfF, String logradouro, String cep, String numero, String complemento, String telefoneF, Login login, Cargo cargo) {
+        if (getNomeF() == null || getNomeF().isBlank()) {
+            throw new IllegalArgumentException("O nome do funcionário é obrigatório!");
+        }
+
+        if (getCpfF() == null || getCpfF().isBlank()) {
+            throw new IllegalArgumentException("O CPF do funcionário é obrigatório!");
+        }
+        
+         if (getCep() == null || getCep().isBlank()) {
+            throw new IllegalArgumentException("O CEP do funcionário é obrigatório!");
+        }
+        
+        if (getLogradouro() == null || getLogradouro().isBlank()) {
+            throw new IllegalArgumentException("O Logradouro do funcionário é obrigatório!");
+        }
+        
+        if (getNumero() == null || getNumero().isBlank()) {
+            throw new IllegalArgumentException("O Numero da residencia do funcionário é obrigatório!");
+        }
+        
+        if (getComplemento() == null || getComplemento().isBlank()) {
+            throw new IllegalArgumentException("O complemento do funcionário é obrigatório!");
+        }
+        
+        if (getTelefoneF()== null || getTelefoneF().isBlank()) {
+            throw new IllegalArgumentException("O complemento do funcionário é obrigatório!");
+        }     
+        
+        if (getCargo() == null || getCargo().getId() == null) {
+            throw new IllegalArgumentException("O funcionário deve possuir um cargo válido!");
+        }
+        
         this.nomeF = nomeF;
         this.cpfF = cpfF;
         this.logradouro = logradouro;
