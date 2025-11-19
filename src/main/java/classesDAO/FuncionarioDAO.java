@@ -16,7 +16,7 @@ public class FuncionarioDAO {
         executarTransacao(em -> em.merge(funcionario));
     }
     
-    public Funcionario buscarPorId(String id){
+    public Funcionario buscarPorId(Long id){
         EntityManager em = JPAUtil.getEntityManager();
         try{
             return em.find(Funcionario.class, id);
