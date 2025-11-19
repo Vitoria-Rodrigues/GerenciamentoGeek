@@ -19,7 +19,7 @@ public class CargoDAO {
         }
     }
     
-    public Cargo buscarPorId(String id){
+    public Cargo buscarPorId(Long id){
         EntityManager em = JPAUtil.getEntityManager();
         try{
             return em.find(Cargo.class, id);
