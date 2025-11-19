@@ -32,10 +32,9 @@ public class Login {
     public Login() {
     }
 
-    public Login(String login, String senha, Funcionario funcionario) {
+    public Login(String login, String senha) {
         this.login = login;
         this.senha = senha;
-        this.funcionario = funcionario;
     }
     
     public Long getId() {
