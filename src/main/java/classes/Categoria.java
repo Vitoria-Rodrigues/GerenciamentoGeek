@@ -26,7 +26,7 @@ public class Categoria {
         this.nomeCateg = nomeCateg;
     }
     
-
+    
     public Long getId() {
         return id;
     }
