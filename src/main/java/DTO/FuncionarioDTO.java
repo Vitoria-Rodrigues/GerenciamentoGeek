@@ -9,12 +9,14 @@ public class FuncionarioDTO {
     private String telefone;
     private String numero;
     private String complemento;
+    private String login;
+    private String senha;
     private Long cargo;
 
     public FuncionarioDTO() {
     }
 
-    public FuncionarioDTO(String nome, String cpf, String logradouro, String cep, String telefone, String numero, String complemento, Long cargo) {
+    public FuncionarioDTO(String nome, String cpf, String logradouro, String cep, String telefone, String numero, String complemento, String login, String senha,Long cargo) {
         this.nome = nome;
         this.cpf = cpf;
         this.logradouro = logradouro;
@@ -22,6 +24,8 @@ public class FuncionarioDTO {
         this.telefone = telefone;
         this.numero = numero;
         this.complemento = complemento;
+        this.login = login;
+        this.senha = senha;
         this.cargo = cargo;
     }
 
@@ -79,6 +83,22 @@ public class FuncionarioDTO {
 
     public void setComplemento(String complemento) {
         this.complemento = complemento;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
     public Long getCargo() {
