@@ -33,6 +33,14 @@ public class Login {
     }
 
     public Login(String login, String senha) {
+        if(getLogin() == null || getLogin().isBlank()){
+            throw new IllegalArgumentException("O login é obrigatório.");
+        }
+        
+        if(getSenha() == null || getSenha().isBlank()){
+            throw new IllegalArgumentException("A senha é obrigatório.");
+        }
+        
         this.login = login;
         this.senha = senha;
     }
