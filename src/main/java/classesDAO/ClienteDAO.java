@@ -35,12 +35,12 @@ public class ClienteDAO {
         }
     }
     
-    public List<Cliente> buscarPorCPF(String cpf) {
+    public Cliente buscarPorCPF(String cpf) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
             TypedQuery<Cliente> query = em.createQuery("SELECT c FROM Cliente c WHERE c.cpfC = :cpfC", Cliente.class);
             query.setParameter("cpfC", cpf);
-            return query.getResultList();
+            return query.getSingleResult();
         } finally {
             em.close();
         }
