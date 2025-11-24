@@ -30,10 +30,9 @@ public class FormaPagamento {
     public FormaPagamento() {
     }
 
-    public FormaPagamento(String metodoPag, int parcelasPag, Venda venda) {
+    public FormaPagamento(String metodoPag, int parcelasPag) {
         this.metodoPag = metodoPag;
         this.parcelasPag = parcelasPag;
-        this.venda = venda;
     }
 
     public Long getId() {
