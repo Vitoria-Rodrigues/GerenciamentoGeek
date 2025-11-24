@@ -1,8 +1,10 @@
 
 package DTO;
 
+import java.time.LocalDate;
+
 public class VendaDTO {
-    private String data;
+    private LocalDate data;
     private Double total;
     private int qtd;
     private String cpfCliente;
@@ -14,7 +16,7 @@ public class VendaDTO {
     public VendaDTO() {
     }
 
-    public VendaDTO(String data, Double total, int qtd, String cpfCliente, Long idFuncionario, int codProduto, String formaPagamento, int parcelasPagamento) {
+    public VendaDTO(LocalDate data, Double total, int qtd, String cpfCliente, Long idFuncionario, int codProduto, String formaPagamento, int parcelasPagamento) {
         this.data = data;
         this.total = total;
         this.qtd = qtd;
@@ -25,11 +27,11 @@ public class VendaDTO {
         this.parcelasPagamento = parcelasPagamento;
     }
 
-    public String getData() {
+    public LocalDate getData() {
         return data;
     }
 
-    public void setData(String data) {
+    public void setData(LocalDate data) {
         this.data = data;
     }
 
