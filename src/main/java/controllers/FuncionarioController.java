@@ -1,6 +1,7 @@
 
 package controllers;
 
+import DTO.FuncionarioDTO;
 import classes.Funcionario;
 import java.util.List;
 import services.FuncionarioService;
@@ -13,9 +14,9 @@ public class FuncionarioController {
         this.funcionarioService = new FuncionarioService();
     }
 
-    public void cadastrarFuncionario(Funcionario funcionario) {
+    public void cadastrarFuncionario(FuncionarioDTO funcionarioDTO) {
         try {
-            funcionarioService.salvarFuncionario(funcionario);
+            funcionarioService.salvarFuncionario(funcionarioDTO);
             System.out.println("Funcionário cadastrado com sucesso!");
         } catch (IllegalArgumentException e) {
             System.out.println("Erro no cadastro");
@@ -24,9 +25,9 @@ public class FuncionarioController {
         }
     }
 
-    public void atualizarFuncionario(Funcionario funcionario) {
+    public void atualizarFuncionario(FuncionarioDTO funcionarioDTO, Long id) {
         try {
-            funcionarioService.atualizarFuncionario(funcionario);
+            funcionarioService.atualizarFuncionario(funcionarioDTO, id);
             System.out.println("Dados do funcionário atualizados com sucesso!");
         } catch (IllegalArgumentException e) {
             System.out.println("Erro na atualização");
