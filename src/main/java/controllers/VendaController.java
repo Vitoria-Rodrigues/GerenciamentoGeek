@@ -1,6 +1,7 @@
 
 package controllers;
 
+import DTO.VendaDTO;
 import classes.Cliente;
 import classes.Produto;
 import classes.Venda;
@@ -12,6 +13,17 @@ public class VendaController {
 
     public VendaController() {
         this.vendaService = new VendaService();
+    }
+    
+    public void cadastrarVendas(VendaDTO vendaDTO) {
+        try {
+            vendaService.cadastrarVenda(vendaDTO);
+            System.out.println("Forma de pagamento cadastrada com sucesso!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Erro ao cadastrar forma de pagamento");
+        } catch (Exception e) {
+            System.out.println("Ocorreu um erro inesperado ao salvar a forma de pagamento.");
+        }
     }
 
     public Cliente buscarClientePorCPF(String cpf) {
@@ -47,16 +59,6 @@ public class VendaController {
             System.out.println("Venda excluída com sucesso!");
         } catch (IllegalArgumentException e) {
             System.out.println("Erro ao excluir venda");
-        }
-    }
-
-    public boolean validarVenda(Venda venda) {
-        try {
-            vendaService.validarVenda(venda);
-            return true;
-        } catch (IllegalArgumentException e) {
-            System.out.println("Erro de validação");
-            return false;
         }
     }
 }
