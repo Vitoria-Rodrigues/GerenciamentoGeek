@@ -14,17 +14,23 @@ public class CargoDAO {
         try{
             TypedQuery<Cargo> query = em.createQuery("SELECT c FROM Cargos c", Cargo.class);
             return query.getResultList();
+        } catch(Exception e){
+            System.out.println(e);
         } finally{
             em.close();
         }
+        return null;
     }
     
     public Cargo buscarPorId(Long id){
         EntityManager em = JPAUtil.getEntityManager();
         try{
             return em.find(Cargo.class, id);
+        } catch(Exception e){
+            System.out.println(e);
         } finally{
             em.close();
         }
+        return null;
     }
 }
