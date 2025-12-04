@@ -70,6 +70,8 @@ public class VendaDAO {
                 consulta.setParameter("nomeC", nome);
             }
             listaVenda = consulta.getResultList();
+        } catch(Exception e){
+            System.out.println(e);
         } finally {
             em.close();
         }
