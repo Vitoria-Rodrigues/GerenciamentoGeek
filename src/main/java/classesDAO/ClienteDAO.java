@@ -20,19 +20,25 @@ public class ClienteDAO {
         EntityManager em = JPAUtil.getEntityManager();
         try{
             return em.find(Cliente.class, id);
+        } catch(Exception e){
+            System.out.println(e);
         } finally{
             em.close();
         }
+        return null;
     }
     
     public List<Cliente> listarTodos(){
         EntityManager em = JPAUtil.getEntityManager();
         try{
-            TypedQuery<Cliente> query = em.createQuery("SELECT C FROM Cliente c", Cliente.class);
+            TypedQuery<Cliente> query = em.createQuery("SELECT c FROM Cliente c", Cliente.class);
             return query.getResultList();
-        } finally{
+        } catch(Exception e){
+            System.out.println(e);
+        }finally{
             em.close();
         }
+        return null;
     }
     
     public Cliente buscarPorCPF(String cpf) {
@@ -41,9 +47,12 @@ public class ClienteDAO {
             TypedQuery<Cliente> query = em.createQuery("SELECT c FROM Cliente c WHERE c.cpfC = :cpfC", Cliente.class);
             query.setParameter("cpfC", cpf);
             return query.getSingleResult();
+        } catch(Exception e){
+            System.out.println(e);
         } finally {
             em.close();
         }
+        return null;
     }
     
     public void excluir(String id) {
@@ -55,6 +64,8 @@ public class ClienteDAO {
             em.remove(cliente);
             }
         em.getTransaction().commit();
+        } catch(Exception e){
+            System.out.println(e);
         } finally {
             em.close();
         }
