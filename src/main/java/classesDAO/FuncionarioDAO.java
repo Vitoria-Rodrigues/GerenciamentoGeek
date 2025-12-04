@@ -20,9 +20,12 @@ public class FuncionarioDAO {
         EntityManager em = JPAUtil.getEntityManager();
         try{
             return em.find(Funcionario.class, id);
+        } catch(Exception e){
+            System.out.println(e);
         } finally{
             em.close();
         }
+        return null;
     }
     
     public List<Funcionario> buscarPorCPF(String cpf) {
@@ -31,9 +34,12 @@ public class FuncionarioDAO {
             TypedQuery<Funcionario> query = em.createQuery("SELECT f FROM Funcionario f WHERE f.cpfF = :cpfF", Funcionario.class);
             query.setParameter("cpfF", cpf);
             return query.getResultList();
+        } catch(Exception e){
+            System.out.println(e);
         } finally {
             em.close();
         }
+        return null;
     }
     
     public List<Funcionario> listarTodos(){
@@ -41,9 +47,12 @@ public class FuncionarioDAO {
         try{
             TypedQuery<Funcionario> query = em.createQuery("SELECT f FROM Funcionario f", Funcionario.class);
             return query.getResultList();
+        } catch(Exception e){
+            System.out.println(e);
         } finally{
             em.close();
         }
+        return null;
     }
 
     public void excluir(String id) {
@@ -55,6 +64,8 @@ public class FuncionarioDAO {
             em.remove(funcionario);
             }
             em.getTransaction().commit();
+        } catch(Exception e){
+            System.out.println(e);
         } finally {
             em.close();
         }
