@@ -33,9 +33,12 @@ public class ProdutoDAO {
         EntityManager em = JPAUtil.getEntityManager();
         try{
             return em.find(Produto.class, id);
+        } catch(Exception e){
+            System.out.println(e);
         } finally{
             em.close();
         }
+        return null;
     }
 
     public List<Produto> listarProdutos(String cod) {
@@ -51,6 +54,8 @@ public class ProdutoDAO {
                 consulta.setParameter("codigoProd", cod);
             }
             listaProd = consulta.getResultList();
+        } catch(Exception e){
+            System.out.println(e);
         } finally {
             em.close();
         }
@@ -63,9 +68,12 @@ public class ProdutoDAO {
         try {
             TypedQuery<Categoria> consulta = em.createQuery("SELECT c FROM Categoria c", Categoria.class);
             return consulta.getResultList();
+        } catch(Exception e){
+            System.out.println(e);
         } finally {
             em.close();
         }
+        return null;
     }
 
     private void executarTransacao(java.util.function.Consumer<EntityManager> acao) {
