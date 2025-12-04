@@ -28,8 +28,23 @@ public class Login {
     @OneToOne
     @JoinColumn(name = "funcionario_id", unique = true)
     private Funcionario funcionario;
-    
 
+    public Login() {
+    }
+
+    public Login(String login, String senha) {
+        if(getLogin() == null || getLogin().isBlank()){
+            throw new IllegalArgumentException("O login é obrigatório.");
+        }
+        
+        if(getSenha() == null || getSenha().isBlank()){
+            throw new IllegalArgumentException("A senha é obrigatório.");
+        }
+        
+        this.login = login;
+        this.senha = senha;
+    }
+    
     public Long getId() {
         return id;
     }

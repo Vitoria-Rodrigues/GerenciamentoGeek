@@ -28,6 +28,14 @@ public class Cargo {
     @OneToMany(mappedBy = "cargo")
     private List<Funcionario> funcionarios;
 
+    public Cargo() {
+    }
+
+    public Cargo(String funcao, BigDecimal salario) {
+        this.funcao = funcao;
+        this.salario = salario;
+    }
+    
     public Long getId() {
         return id;
     }
