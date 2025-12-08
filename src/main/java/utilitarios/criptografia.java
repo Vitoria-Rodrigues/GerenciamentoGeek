@@ -4,7 +4,6 @@ package utilitarios;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import validacao.Alerta;
 
 
 public class criptografia {
@@ -24,7 +23,7 @@ public class criptografia {
         return hashText;
         
         } catch (NoSuchAlgorithmException e) {
-            Alerta.Erro("Erro no MD5", "Erro ao adicionar md5");
+            System.out.println("Erro ao adicionar md5");
         }
         
         return null;
